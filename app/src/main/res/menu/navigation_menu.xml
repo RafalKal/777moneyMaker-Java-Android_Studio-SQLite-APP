@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menuSearch"
-        android:icon="@drawable/search_icon"
-        android:title="@string/search"
-        android:onClick="goToSearch"/>
-
-    <item android:id="@+id/menuAccount"
-        android:icon="@drawable/account_icon"
-        android:title="@string/account" />
-
     <item android:id="@+id/menuWallet"
         android:icon="@drawable/wallet_icon"
         android:title="@string/wallet" />
-
-    <item android:id="@+id/menuSettings"
-        android:icon="@drawable/settings_icon"
-        android:title="@string/settings" />
+    <!--        android:onClick="goToWallet"-->
 
     <item android:id="@+id/menuAnalysis"
         android:icon="@drawable/analysis_icon"
         android:title="@string/analysis" />
+    <!--        android:onClick="goToAnalysis"-->
 
+    <item android:id="@+id/menuSearch"
+        android:icon="@drawable/search_icon"
+        android:title="@string/search" />
+<!--    android:onClick="goToSearch"-->
+
+    <item android:id="@+id/menuAccount"
+        android:icon="@drawable/account_icon"
+        android:title="@string/account" />
+<!--        android:onClick="goToAccounts" -->
+
+    <item android:id="@+id/menuCategories"
+        android:icon="@drawable/category_icon"
+        android:title="@string/category" />
+    <!--        android:onClick="goToSettings"-->
+
+    <item android:id="@+id/menuContactUs"
+        android:icon="@drawable/contact_us_icon"
+        android:title="@string/contactUs" />
+    <!--        android:onClick="goToSettings"-->
+
+
+    <item android:id="@+id/menuSettings"
+        android:icon="@drawable/settings_icon"
+        android:title="@string/settings" />
+    <!--        android:onClick="goToSettings"-->
 
 </menu>

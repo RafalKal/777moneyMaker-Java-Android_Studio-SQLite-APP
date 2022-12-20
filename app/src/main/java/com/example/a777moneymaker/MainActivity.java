@@ -1,13 +1,14 @@
 package com.example.a777moneymaker;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_wallet);
+        setContentView(R.layout.main_wallet_activity);
 
         DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
 
@@ -30,16 +31,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigationView);
         navigationView.setItemIconTintList(null);
 
+        NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
     }
 
     public void addExpense(View view){
-      Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
-    //    Intent intent = new Intent(getApplicationContext(), SimpleRecyclerViewActivity.class);
-        startActivity(intent);
-    }
-
-    public void goToSearch(MenuItem item) {
-        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
         startActivity(intent);
     }
 }

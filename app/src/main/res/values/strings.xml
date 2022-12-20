@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">777moneyMaker</string>
-    <string name="account">Konto</string>
     <string name="wallet">Portfel</string>
     <string name="analysis">Analizy</string>
-    <string name="settings">Ustawienia</string>
     <string name="search">Szukaj</string>
+    <string name="account">Konto</string>
+    <string name="category">Kategorie</string>
+    <string name="settings">Ustawienia</string>
+    <string name="contactUs">Kontakt</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

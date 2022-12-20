@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -25,15 +24,15 @@ public class AddExpenseActivity extends AppCompatActivity {
     Spinner categorySpinner;
     TextView shoppingListTextView;
     EditText datePicker;
-    java.util.Calendar Calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.add_expense_activity);
 
         Spinner dropdown = findViewById(R.id.categorySpinner);
-        String[] categories = {"Jedzenie", "Napoje", "Paliwo", "Komunikacja", "Alkohol", "Papierosy"};
+        String[] categories = {"Jedzenie", "Napoje", "Paliwo", "Komunikacja", "Alkohol", "Papierosy", "Rozrywka", "Edukacja"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
@@ -50,6 +49,9 @@ public class AddExpenseActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 
     public void addToShoppingList(View view) throws ParseException {
@@ -88,12 +90,12 @@ public class AddExpenseActivity extends AppCompatActivity {
                                     calendar.get(java.util.Calendar.MONTH),
                                     calendar.get(java.util.Calendar.DAY_OF_MONTH)).show());
 
-        Expense expense = new Expense(name, price, category);
-
-        shoppingListTextView.setText(shoppingListTextView.getText()
-                + "\nnazwa: " + expense.getName() + ", "
-                + expense.getPrice() + "PLN, data: "
-                + date + ", kat: " +  expense.getCategory() + "\n");
+//        Expense expense = new Expense(name, price, category);
+//
+//        shoppingListTextView.setText(shoppingListTextView.getText()
+//                + "\nnazwa: " + expense.getName() + ", "
+//                + expense.getPrice() + "PLN, data: "
+//                + date + ", kat: " +  expense.getCategory() + "\n");
 
         nameTextView.setText(null);
         priceTextView.setText(null);
