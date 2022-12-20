@@ -26,7 +26,9 @@
                 android:value="" />
         </activity>
         <activity android:name="AddExpenseActivity" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".SimpleRecyclerViewActivity" />
+
     </application>
 
 </manifest>

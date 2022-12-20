@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">777moneyMaker</string>
+    <string name="account">Konto</string>
+    <string name="wallet">Portfel</string>
+    <string name="analysis">Analizy</string>
+    <string name="settings">Ustawienia</string>
+    <string name="search">Szukaj</string>
+
 </resources>
