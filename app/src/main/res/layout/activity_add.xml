@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/addExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DODAJ WYDATEK"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:layout_marginTop="15dp" />
+
+    <View
+        android:id="@+id/horizontalLine1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/addExpense"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/addItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/horizontalLine1"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/expenseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="NAZWA WYDATKU"
+            android:layout_margin="10dp">
+        </EditText>
+
+        <EditText
+            android:id="@+id/expensePrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="CENA WYDATKU"
+            android:layout_margin="10dp">
+        </EditText>
+
+        <Button
+            android:id="@+id/addToShoppingListButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:layout_margin="10dp"
+            android:onClick="addToShoppingList"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        </Button>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/selectCategoryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addItem"
+        android:text="Wybierz kategorię"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/selectCategoryText"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/btn_dropdown" />
+
+    <View
+        android:id="@+id/horizontalLine2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/categorySpinner"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/expenseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="DATA: DD-MM-YYYY"
+        android:inputType="date"
+        android:layout_below="@id/horizontalLine2"
+        android:layout_centerHorizontal="true">
+    </EditText>
+
+    <View
+        android:id="@+id/horizontalLine3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/expenseDate"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:id="@+id/shoppingList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/horizontalLine3"
+        android:layout_marginTop="30dp">
+
+    </TextView>
+    
+    <EditText
+        android:id="@+id/datePicker"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shoppingList"
+        android:hint="Pick your date"
+        android:textSize="30dp"
+        android:clickable="true"
+        android:cursorVisible="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+
+
+    <Button
+        android:id="@+id/addExpenseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="submitAddExpense"
+        android:text="Dodaj wydatek" />
+
+</RelativeLayout>
