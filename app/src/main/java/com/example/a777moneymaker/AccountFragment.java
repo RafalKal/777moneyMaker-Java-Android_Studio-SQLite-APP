@@ -12,6 +12,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PARAM1 = "param1";
@@ -23,6 +25,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     EditText accountEditText;
     Switch mainAccountSwitch;
     Button addAccountButton;
+    Button showAccountsButton;
     TextView nameTextView;
     TextView booleanTextView;
     AccountModel accountModel;
@@ -53,7 +56,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_account, container, false);
         addAccountButton = (Button) myView.findViewById(R.id.addAccountButton);
+        showAccountsButton = (Button) myView.findViewById(R.id.showAccountsButton);
         addAccountButton.setOnClickListener(this);
+        showAccountsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataBaseHelper db = new DataBaseHelper(AccountFragment.this.getActivity());
+                List<AccountModel> everyAccount = db.getEveryAccount();
+                Toast.makeText(AccountFragment.this.getActivity(), everyAccount.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
         return myView;
         //return inflater.inflate(R.layout.fragment_account, container, false);
     }
@@ -73,23 +85,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             nameTextView.setText(accountName);
             booleanTextView.setText(isMainAccount.toString());
             accountModel = new AccountModel(1, accountName, isMainAccount);
-            Toast.makeText(AccountFragment.this.getActivity(), accountModel.getName(), Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             Toast.makeText(AccountFragment.this.getActivity(), "Nie udalo sie stworzyc obiektu accountModel", Toast.LENGTH_LONG).show();
         }
 
         try {
-            wait(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            dataBaseHelper.addOne(accountModel);
-            Toast.makeText(AccountFragment.this.getActivity(), accountModel.isMainAcc().toString(), Toast.LENGTH_SHORT);
+            dataBaseHelper.addAccountModel(accountModel);
         }catch (Exception e){
             Toast.makeText(AccountFragment.this.getActivity(), "Nie udalo sie dodac konta do bazy danych", Toast.LENGTH_LONG);
         }
     }
+
 }
 
