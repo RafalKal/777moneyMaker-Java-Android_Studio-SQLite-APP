@@ -1,4 +1,4 @@
-package com.example.a777moneymaker;
+package com.example.a777moneymaker.models;
 
 public class AccountModel {
 

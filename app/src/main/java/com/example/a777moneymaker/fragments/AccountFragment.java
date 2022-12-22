@@ -1,4 +1,4 @@
-package com.example.a777moneymaker;
+package com.example.a777moneymaker.fragments;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -7,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.a777moneymaker.DataBaseColumnControllers.AccountsController;
+import com.example.a777moneymaker.R;
+import com.example.a777moneymaker.dataBaseColumnControllers.AccountsController;
+import com.example.a777moneymaker.models.AccountModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
@@ -65,7 +68,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 AccountsController dbAccountsController = new AccountsController(AccountFragment.this.getActivity());
                 List<AccountModel> everyAccount = dbAccountsController.getEveryAccount();
-                Toast.makeText(AccountFragment.this.getActivity(), everyAccount.toString(), Toast.LENGTH_LONG).show();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
+
+                // on below line we are creating a variable
+                // for current date and time and calling a simple date format in it.
+                //String currentDateAndTime = sdf.format(new Date());
+                String currentDateAndTime = sdf.format(new Date());
+
+                Toast.makeText(AccountFragment.this.getActivity(), currentDateAndTime, Toast.LENGTH_LONG).show();
             }
         });
         return myView;

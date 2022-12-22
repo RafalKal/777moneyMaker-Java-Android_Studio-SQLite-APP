@@ -7,43 +7,43 @@
 
     <fragment
         android:id="@+id/menuWallet"
-        android:name="com.example.a777moneymaker.WalletFragment"
+        android:name="com.example.a777moneymaker.fragments.WalletFragment"
         android:label="Wallet"
         tools:layout="@layout/fragment_wallet" />
 
     <fragment
         android:id="@+id/menuAnalysis"
-        android:name="com.example.a777moneymaker.AnalysisFragment"
+        android:name="com.example.a777moneymaker.fragments.AnalysisFragment"
         android:label="Analysis"
         tools:layout="@layout/fragment_analysis" />
 
     <fragment
         android:id="@+id/menuSearch"
-        android:name="com.example.a777moneymaker.SearchFragment"
+        android:name="com.example.a777moneymaker.fragments.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search" />
 
     <fragment
         android:id="@+id/menuAccount"
-        android:name="com.example.a777moneymaker.AccountFragment"
+        android:name="com.example.a777moneymaker.fragments.AccountFragment"
         android:label="Account"
         tools:layout="@layout/fragment_account" />
 
     <fragment
         android:id="@+id/menuCategories"
-        android:name="com.example.a777moneymaker.CategoryFragment"
+        android:name="com.example.a777moneymaker.fragments.CategoryFragment"
         android:label="Categories"
         tools:layout="@layout/fragment_category" />
 
     <fragment
         android:id="@+id/menuContactUs"
-        android:name="com.example.a777moneymaker.ContactUsFragment"
+        android:name="com.example.a777moneymaker.fragments.ContactUsFragment"
         android:label="ContactUs"
         tools:layout="@layout/fragment_contact_us" />
 
     <fragment
         android:id="@+id/menuSettings"
-        android:name="com.example.a777moneymaker.SettingsFragment"
+        android:name="com.example.a777moneymaker.fragments.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
 

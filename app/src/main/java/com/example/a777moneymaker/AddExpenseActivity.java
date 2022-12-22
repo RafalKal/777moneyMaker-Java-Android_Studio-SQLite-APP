@@ -11,6 +11,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.a777moneymaker.dataBaseColumnControllers.AccountsController;
+import com.example.a777moneymaker.dataBaseColumnControllers.ExpenseController;
+import com.example.a777moneymaker.fragments.AccountFragment;
+import com.example.a777moneymaker.models.ExpenseModel;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,7 +29,8 @@ public class AddExpenseActivity extends AppCompatActivity {
     EditText dateTextView;
     Spinner categorySpinner;
     TextView shoppingListTextView;
-    EditText datePicker;
+    ExpenseModel expenseModel;
+    ExpenseController dbExpenseController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,37 +72,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         float price = Float.parseFloat(priceTextView.getText().toString());
         String category = categorySpinner.getSelectedItem().toString();
 
-        datePicker = findViewById(R.id.datePicker);
-        Calendar calendar = java.util.Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(java.util.Calendar.YEAR, year);
-                calendar.set(java.util.Calendar.MONTH, month);
-                calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                updateCalendar();
-            }
-
-            private void updateCalendar(){
-                String Format = "MM/dd/yy";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Format, Locale.US);
-
-                datePicker.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        datePicker.setOnClickListener(v -> new DatePickerDialog(AddExpenseActivity.this, date,
-                                    calendar.get(java.util.Calendar.YEAR),
-                                    calendar.get(java.util.Calendar.MONTH),
-                                    calendar.get(java.util.Calendar.DAY_OF_MONTH)).show());
-
-//        Expense expense = new Expense(name, price, category);
-//
-//        shoppingListTextView.setText(shoppingListTextView.getText()
-//                + "\nnazwa: " + expense.getName() + ", "
-//                + expense.getPrice() + "PLN, data: "
-//                + date + ", kat: " +  expense.getCategory() + "\n");
 
         nameTextView.setText(null);
         priceTextView.setText(null);
@@ -103,7 +79,19 @@ public class AddExpenseActivity extends AppCompatActivity {
 
 
     public void submitAddExpense(View view){
-        finish();
+        expenseModel = new ExpenseModel(1, "AAA", "BBB", 12.12F, "AAA", "AAA");
+
+        dbExpenseController = new ExpenseController(this);
+
+
+        try {
+            dbExpenseController.addExpenseModel(expenseModel);
+            Toast.makeText(AddExpenseActivity.this, "Udalo sie dodac wydatek do db", Toast.LENGTH_LONG).show();
+
+        }catch (Exception e){
+            Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do db", Toast.LENGTH_LONG).show();
+        }
+        //finish();
     }
 
 }

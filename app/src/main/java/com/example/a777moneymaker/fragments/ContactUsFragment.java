@@ -1,10 +1,12 @@
-package com.example.a777moneymaker;
+package com.example.a777moneymaker.fragments;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.a777moneymaker.R;
 
 public class ContactUsFragment extends Fragment {
 

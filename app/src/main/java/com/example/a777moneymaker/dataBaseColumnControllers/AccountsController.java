@@ -1,11 +1,11 @@
-package com.example.a777moneymaker.DataBaseColumnControllers;
+package com.example.a777moneymaker.dataBaseColumnControllers;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
-import com.example.a777moneymaker.AccountModel;
+import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.DataBaseHelper;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,18 @@ public class AccountsController extends DataBaseHelper {
         }
     }
 
-//    public boolean deleteAccountModel(AccountModel accountModel){
-//
-//    }
+    public boolean deleteAccountModel(AccountModel accountModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "DELETE FROM " + USER_ACC_TABLE + " WHERE " + COLUMN_ACCOUNT_ID + " = " + accountModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 
     public List<AccountModel> getEveryAccount() {
         List<AccountModel> returnList = new ArrayList<>();
