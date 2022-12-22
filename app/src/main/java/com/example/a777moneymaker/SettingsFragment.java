@@ -14,7 +14,9 @@ public class SettingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SettingsFragment() {}
+    public SettingsFragment() {
+        //empty constructor
+    }
 
     public static SettingsFragment newInstance(String param1, String param2) {
         SettingsFragment fragment = new SettingsFragment();

@@ -14,7 +14,9 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SearchFragment() {}
+    public SearchFragment() {
+        //empty constructor
+    }
 
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();

@@ -14,7 +14,9 @@ public class WalletFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public WalletFragment() {}
+    public WalletFragment() {
+        // empty constructor
+    }
 
     public static WalletFragment newInstance(String param1, String param2) {
         WalletFragment fragment = new WalletFragment();

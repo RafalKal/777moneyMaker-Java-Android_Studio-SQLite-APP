@@ -12,6 +12,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a777moneymaker.DataBaseColumnControllers.AccountsController;
+
 import java.util.List;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
@@ -29,7 +31,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     TextView nameTextView;
     TextView booleanTextView;
     AccountModel accountModel;
-    DataBaseHelper dataBaseHelper;
+    AccountsController dbAccountsController;
 
 
     public AccountFragment() {}
@@ -61,8 +63,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         showAccountsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataBaseHelper db = new DataBaseHelper(AccountFragment.this.getActivity());
-                List<AccountModel> everyAccount = db.getEveryAccount();
+                AccountsController dbAccountsController = new AccountsController(AccountFragment.this.getActivity());
+                List<AccountModel> everyAccount = dbAccountsController.getEveryAccount();
                 Toast.makeText(AccountFragment.this.getActivity(), everyAccount.toString(), Toast.LENGTH_LONG).show();
             }
         });
@@ -80,7 +82,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         String accountName = accountEditText.getText().toString();
         Boolean isMainAccount = (Boolean) mainAccountSwitch.isChecked();
 
-        dataBaseHelper = new DataBaseHelper(AccountFragment.this.getActivity());
+        dbAccountsController = new AccountsController(AccountFragment.this.getActivity());
         try {
             nameTextView.setText(accountName);
             booleanTextView.setText(isMainAccount.toString());
@@ -90,7 +92,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
 
         try {
-            dataBaseHelper.addAccountModel(accountModel);
+            dbAccountsController.addAccountModel(accountModel);
         }catch (Exception e){
             Toast.makeText(AccountFragment.this.getActivity(), "Nie udalo sie dodac konta do bazy danych", Toast.LENGTH_LONG);
         }
