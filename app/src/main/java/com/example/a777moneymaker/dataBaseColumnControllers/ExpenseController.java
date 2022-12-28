@@ -28,13 +28,17 @@ public class ExpenseController extends DataBaseHelper {
         cv.put(COLUMN_EXPENSE_CATEGORY, expenseModel.getCategory());
         cv.put(COLUMN_EXPENSE_DATE, expenseModel.getDate());
 
-        long insert = db.insert(EXPENSE_TABLE, null, cv);
-
-        if (insert == -1){
+        try {
+            long insert = db.insert(EXPENSE_TABLE, null, cv);
+            if (insert == -1){
+                return false;
+            }
+            else {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Nie udalo sie dodać do bazy danych - kontroller");
             return false;
-        }
-        else {
-            return true;
         }
     }
 

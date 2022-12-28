@@ -3,6 +3,8 @@ package com.example.a777moneymaker;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -36,9 +38,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
         COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_DATE + " TEXT)";
 
+        try {
+            db.execSQL(createExpenseTableStatement);
+            System.out.println("Udalo sie stworzyc tabele");
+        } catch (Exception e){
+            System.out.println("Nie udalo sie stworzyc tabeli");
+        }
+
         // EXECUTION OF THE ABOVE
         db.execSQL(createAccountTableStatement);
-        db.execSQL(createExpenseTableStatement);
+
+
+
     }
 
     @Override

@@ -1,26 +1,17 @@
 package com.example.a777moneymaker;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.a777moneymaker.dataBaseColumnControllers.AccountsController;
 import com.example.a777moneymaker.dataBaseColumnControllers.ExpenseController;
-import com.example.a777moneymaker.fragments.AccountFragment;
 import com.example.a777moneymaker.models.ExpenseModel;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
@@ -79,14 +70,15 @@ public class AddExpenseActivity extends AppCompatActivity {
 
 
     public void submitAddExpense(View view){
+        DataBaseHelper dataBaseHelper = new DataBaseHelper(AddExpenseActivity.this);
         expenseModel = new ExpenseModel(1, "AAA", "BBB", 12.12F, "AAA", "AAA");
 
-        dbExpenseController = new ExpenseController(this);
+        dbExpenseController = new ExpenseController(AddExpenseActivity.this);
 
 
         try {
             dbExpenseController.addExpenseModel(expenseModel);
-            Toast.makeText(AddExpenseActivity.this, "Udalo sie dodac wydatek do db", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddExpenseActivity.this, dbExpenseController.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e){
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do db", Toast.LENGTH_LONG).show();
