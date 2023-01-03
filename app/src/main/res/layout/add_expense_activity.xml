@@ -103,13 +103,6 @@
         android:layout_height="330dp"
         android:layout_below="@id/datePickerButton"/>
 
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/row"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp" >
-    </TextView>
-
     <Button
         android:id="@+id/addExpenseButton"
         android:layout_width="wrap_content"
@@ -119,8 +112,5 @@
         android:layout_alignParentBottom="true"
         android:onClick="submitAddExpense"
         android:text="Dodaj wydatek" />
-
-
-
 
 </RelativeLayout>

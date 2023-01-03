@@ -32,10 +32,8 @@ public class AddExpenseActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     ArrayList<String> itemsList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         // OPEN DATABASE HELPER / CONTROLLER
         dbHelper = new DataBaseHelper(AddExpenseActivity.this);
 
@@ -78,7 +76,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         itemsListView = (ListView) findViewById(R.id.itemsListView);
     }
 
-
+    //--------------------------------------------------------------------------------------\
+    // FUNCTIONS FOR DATA PICKER                                                            |
+    //--------------------------------------------------------------------------------------/
     private String getMonthFormat(int month){
         if(month==1)
             return "JAN";
@@ -107,10 +107,6 @@ public class AddExpenseActivity extends AppCompatActivity {
         return "JAN";
     }
 
-
-    //--------------------------------------------------------------------------------------\
-    // FUNCTIONS FOR DATA PICKER                                                            |
-    //--------------------------------------------------------------------------------------/
     private String getTodaysDate(){
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -186,13 +182,16 @@ public class AddExpenseActivity extends AppCompatActivity {
         // NEW EXPENSE OBJECT
         expenseModel = new ExpenseModel(name, description, price, category, date);
 
-        // ADDING NEW
+        // ADDING NEW STRING TO ARRAYLIST
         itemsList.add(expenseModel.toString());
 
+        // ADAPTER FOR FILLING THE DATA LISTVIEW
         adapter = new ArrayAdapter<String>(this, R.layout.row_in_list, itemsList);
 
+        // FILLING THE LISTVIEW WITH DATA
         itemsListView.setAdapter(adapter);
 
+        // SET INPUTS TO DEFAULT INITIAL VALUES
         nameTextView.setText(null);
         priceTextView.setText(null);
     }
