@@ -1,5 +1,8 @@
 package com.example.a777moneymaker.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class ExpenseModel {
 
     private int id;
@@ -9,9 +12,6 @@ public class ExpenseModel {
     private String category;
     private String date;
 
-    public ExpenseModel(){
-        // empty constructor
-    }
 
     public ExpenseModel(int id, String name, String description, float price, String category, String date) {
         this.id = id;
@@ -22,16 +22,17 @@ public class ExpenseModel {
         this.date = date;
     }
 
+    public ExpenseModel(String name, String description, float price, String category, String date) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.date = date;
+    }
+
     @Override
     public String toString() {
-        return "ExpenseModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", category='" + category + '\'' +
-                ", date='" + date + '\'' +
-                '}';
+        return "Wydatek: id= " + id + ", nazwa= " + name + ", opis= " + description + " cena= " + price + ", kategoria= " + category + ", data= " + date;
     }
 
     public int getId() {
@@ -81,4 +82,6 @@ public class ExpenseModel {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public ExpenseModel(){}
 }

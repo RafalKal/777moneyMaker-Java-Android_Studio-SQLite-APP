@@ -1,34 +1,52 @@
 package com.example.a777moneymaker;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.a777moneymaker.dataBaseColumnControllers.ExpenseController;
 import com.example.a777moneymaker.models.ExpenseModel;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddExpenseActivity extends AppCompatActivity {
 
     EditText nameTextView;
     EditText priceTextView;
-    EditText dateTextView;
+    Button addToShoppingListButton;
     Spinner categorySpinner;
-    TextView shoppingListTextView;
+    DatePickerDialog datePickerDialog;
+    Button dateButton;
     ExpenseModel expenseModel;
-    ExpenseController dbExpenseController;
+    DataBaseHelper dbHelper;
+    ListView itemsListView;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> itemsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // OPEN DATABASE HELPER / CONTROLLER
+        dbHelper = new DataBaseHelper(AddExpenseActivity.this);
+
+        // INIT LAYOUT FROM XML
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_expense_activity);
 
+        // '+' BUTTON
+        addToShoppingListButton = findViewById(R.id.addToShoppingListButton);
+
+        // CATEGORY SPINNER
         Spinner dropdown = findViewById(R.id.categorySpinner);
         String[] categories = {"Jedzenie", "Napoje", "Paliwo", "Komunikacja", "Alkohol", "Papierosy", "Rozrywka", "Edukacja"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
@@ -48,42 +66,134 @@ public class AddExpenseActivity extends AppCompatActivity {
             }
         });
 
+        // DATEPICKER THINGS...
+        initDatePicker();
+        dateButton = findViewById(R.id.datePickerButton);
+        dateButton.setText(getTodaysDate());
 
+        // ARRAY LIST CONTAINING Expenses.toStrings
+        itemsList = new ArrayList<>();
 
-    }
-
-    public void addToShoppingList(View view) throws ParseException {
-        nameTextView = findViewById(R.id.expenseName);
-        priceTextView = findViewById(R.id.expensePrice);
-        dateTextView = (EditText)findViewById(R.id.expenseDate);
-        categorySpinner = findViewById(R.id.categorySpinner);
-        shoppingListTextView = findViewById(R.id.shoppingList);
-
-        String name = nameTextView.getText().toString();
-        float price = Float.parseFloat(priceTextView.getText().toString());
-        String category = categorySpinner.getSelectedItem().toString();
-
-
-        nameTextView.setText(null);
-        priceTextView.setText(null);
+        // LIST VIEW
+        itemsListView = (ListView) findViewById(R.id.itemsListView);
     }
 
 
-    public void submitAddExpense(View view){
-        DataBaseHelper dataBaseHelper = new DataBaseHelper(AddExpenseActivity.this);
-        expenseModel = new ExpenseModel(1, "AAA", "BBB", 12.12F, "AAA", "AAA");
+    private String getMonthFormat(int month){
+        if(month==1)
+            return "JAN";
+        if(month==2)
+            return "FEB";
+        if(month==3)
+            return "MAR";
+        if(month==4)
+            return "APR";
+        if(month==5)
+            return "MAY";
+        if(month==6)
+            return "JUN";
+        if(month==7)
+            return "JUL";
+        if(month==8)
+            return "AUG";
+        if(month==9)
+            return "SEP";
+        if(month==10)
+            return "OCT";
+        if(month==11)
+            return "NOV";
+        if(month==12)
+            return "DEC";
+        return "JAN";
+    }
 
-        dbExpenseController = new ExpenseController(AddExpenseActivity.this);
 
+    //--------------------------------------------------------------------------------------\
+    // FUNCTIONS FOR DATA PICKER                                                            |
+    //--------------------------------------------------------------------------------------/
+    private String getTodaysDate(){
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        month = month + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        return makeDateString(day, month, year);
+    }
+
+    private void initDatePicker(){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month + 1;
+                String date = makeDateString(day, month, year);
+                dateButton.setText(date);
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int mont = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int style = AlertDialog.THEME_HOLO_LIGHT;
+
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, mont, day);
+    }
+
+    private String makeDateString(int day, int month, int year) {
+        return getMonthFormat(month) + " " + day + " " + year;
+    }
+
+    public void openDatePicker(View view) {
+        datePickerDialog.show();
+    }
+    //--------------------------------------------------------------------------------------|
+
+
+    public void submitAddExpense(View view) {
+
+        dbHelper = new DataBaseHelper(AddExpenseActivity.this);
+
+        expenseModel = new ExpenseModel("AAA", "BBB", 12.12F, "AAA", "AAA");
 
         try {
-            dbExpenseController.addExpenseModel(expenseModel);
-            Toast.makeText(AddExpenseActivity.this, dbExpenseController.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
+            dbHelper.addExpenseModel(expenseModel);
+            Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
 
-        }catch (Exception e){
+        }catch (Exception e) {
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do db", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
         //finish();
     }
 
+    // '+' BUTTON
+    public void addToShoppingList(View view) throws ParseException {
+
+        // LINKING TO COMPONENTS FROM XML LAYOUT USING ID
+        nameTextView = findViewById(R.id.expenseName);
+        priceTextView = findViewById(R.id.expensePrice);
+        categorySpinner = findViewById(R.id.categorySpinner);
+        dateButton.getText();
+
+        // GET TEXTS FROM INPUTS
+        String name = nameTextView.getText().toString();
+        String description = "*opis*";
+        float price = Float.parseFloat(priceTextView.getText().toString());
+        String category = categorySpinner.getSelectedItem().toString();
+        String date = (String) dateButton.getText();
+
+        // NEW EXPENSE OBJECT
+        expenseModel = new ExpenseModel(name, description, price, category, date);
+
+        // ADDING NEW
+        itemsList.add(expenseModel.toString());
+
+        adapter = new ArrayAdapter<String>(this, R.layout.row_in_list, itemsList);
+
+        itemsListView.setAdapter(adapter);
+
+        nameTextView.setText(null);
+        priceTextView.setText(null);
+    }
 }

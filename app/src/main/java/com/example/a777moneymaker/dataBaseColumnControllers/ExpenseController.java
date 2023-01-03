@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.models.ExpenseModel;
-
 import java.util.ArrayList;
 import java.util.List;
 

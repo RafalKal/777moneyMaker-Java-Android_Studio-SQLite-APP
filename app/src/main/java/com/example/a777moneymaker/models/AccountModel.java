@@ -12,6 +12,11 @@ public class AccountModel {
         this.isMainAcc = isMainAcc;
     }
 
+    public AccountModel(String name, boolean isMainAcc) {
+        this.name = name;
+        this.isMainAcc = isMainAcc;
+    }
+
     @Override
     public String toString() {
         return "AccountModel{" +

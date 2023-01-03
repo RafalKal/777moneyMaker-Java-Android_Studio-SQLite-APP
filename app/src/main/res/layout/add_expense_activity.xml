@@ -42,10 +42,10 @@
 
         <EditText
             android:id="@+id/expensePrice"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:hint="CENA WYDATKU"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:hint="CENA WYDATKU">
         </EditText>
 
         <Button
@@ -53,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:layout_margin="10dp"
             android:onClick="addToShoppingList"
+            android:layout_margin="10dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton">
         </Button>
     </LinearLayout>
@@ -75,41 +75,40 @@
         android:layout_centerHorizontal="true"
         android:background="@android:drawable/btn_dropdown" />
 
-    <View
-        android:id="@+id/horizontalLine2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@id/categorySpinner"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/expenseDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="DATA: DD-MM-YYYY"
-        android:inputType="date"
-        android:layout_below="@id/horizontalLine2"
-        android:layout_centerHorizontal="true">
-    </EditText>
-
-    <View
-        android:id="@+id/horizontalLine3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@id/expenseDate"
-        android:layout_marginTop="15dp"/>
 
     <TextView
-        android:id="@+id/shoppingList"
+        android:id="@+id/selectDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/horizontalLine3"
-        android:layout_marginTop="30dp">
+        android:layout_below="@+id/categorySpinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Select Date:"
+        android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/datePickerButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selectDateTextView"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/purple_500"
+        android:text="JAN 03 2020"
+        style="?android:spinnerStyle"
+        android:onClick="openDatePicker" />
+
+    <ListView
+        android:id="@+id/itemsListView"
+        android:layout_width="match_parent"
+        android:layout_height="330dp"
+        android:layout_below="@id/datePickerButton"/>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/row"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" >
     </TextView>
-
 
     <Button
         android:id="@+id/addExpenseButton"
@@ -120,5 +119,8 @@
         android:layout_alignParentBottom="true"
         android:onClick="submitAddExpense"
         android:text="Dodaj wydatek" />
+
+
+
 
 </RelativeLayout>
