@@ -10,12 +10,11 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
-import com.example.a777moneymaker.dataBaseColumnControllers.AccountsController;
 import com.example.a777moneymaker.models.AccountModel;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
@@ -39,11 +38,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public AccountFragment() {}
 
     public static AccountFragment newInstance(String param1, String param2) {
+
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -61,9 +62,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         View myView = inflater.inflate(R.layout.fragment_account, container, false);
 
+        if(ApplicationState.getActualAccount()=="Rafal"){
+            Toast.makeText(AccountFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
+        }
+
         addAccountButton = (Button) myView.findViewById(R.id.addAccountButton);
         showAccountsButton = (Button) myView.findViewById(R.id.showAccountsButton);
         addAccountButton.setOnClickListener(this);
+
         showAccountsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

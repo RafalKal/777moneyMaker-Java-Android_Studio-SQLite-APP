@@ -5,25 +5,31 @@ public class AccountModel {
     private int id;
     private String name;
     private Boolean isMainAcc;
-
-    public AccountModel(int id, String name, boolean isMainAcc) {
-        this.id = id;
-        this.name = name;
-        this.isMainAcc = isMainAcc;
-    }
+    private float balance;
 
     public AccountModel(String name, boolean isMainAcc) {
         this.name = name;
         this.isMainAcc = isMainAcc;
+        this.balance = 0;
+    }
+    public AccountModel(int id, String name, boolean isMainAcc) {
+        this.id = id;
+        this.name = name;
+        this.isMainAcc = isMainAcc;
+        this.balance = 0;
     }
 
     @Override
     public String toString() {
-        return "AccountModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isMainAcc=" + isMainAcc +
-                '}';
+        return "id= " + id + ", nazwa= " + name + ", główne konto= " + isMainAcc + ", saldo= " + balance;
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     public int getId() {

@@ -31,6 +31,9 @@ public class AddExpenseActivity extends AppCompatActivity {
     ListView itemsListView;
     ArrayAdapter<String> adapter;
     ArrayList<String> itemsList;
+    int dayA;
+    int monthA;
+    int yearA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
 
+
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -60,7 +64,6 @@ public class AddExpenseActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -68,6 +71,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         initDatePicker();
         dateButton = findViewById(R.id.datePickerButton);
         dateButton.setText(getTodaysDate());
+
+
 
         // ARRAY LIST CONTAINING Expenses.toStrings
         itemsList = new ArrayList<>();
@@ -122,18 +127,22 @@ public class AddExpenseActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
+
                 String date = makeDateString(day, month, year);
                 dateButton.setText(date);
+                dayA = day;
+                monthA = month;
+                yearA = year;
             }
         };
 
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
-        int mont = cal.get(Calendar.MONTH);
+        int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, mont, day);
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
     }
 
     private String makeDateString(int day, int month, int year) {
@@ -150,7 +159,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         dbHelper = new DataBaseHelper(AddExpenseActivity.this);
 
-        expenseModel = new ExpenseModel("AAA", "BBB", 12.12F, "AAA", "AAA");
+        expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
 
         try {
             dbHelper.addExpenseModel(expenseModel);
@@ -180,7 +189,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         String date = (String) dateButton.getText();
 
         // NEW EXPENSE OBJECT
-        expenseModel = new ExpenseModel(name, description, price, category, date);
+        expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
 
         // ADDING NEW STRING TO ARRAYLIST
         itemsList.add(expenseModel.toString());

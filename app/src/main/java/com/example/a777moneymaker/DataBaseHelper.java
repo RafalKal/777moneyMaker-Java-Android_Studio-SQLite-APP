@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.ExpenseModel;
@@ -26,7 +25,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EXPENSE_DESCRIPTION = "EXPENSE_DESCRIPTION";
     public static final String COLUMN_EXPENSE_PRICE = "EXPENSE_PRICE";
     public static final String COLUMN_EXPENSE_CATEGORY = "EXPENSE_CATEGORY";
-    public static final String COLUMN_EXPENSE_DATE = "EXPENSE_DATE";
+    public static final String COLUMN_EXPENSE_ACCOUNT = "EXPENSE_ACCOUNT";
+    public static final String COLUMN_EXPENSE_DAY = "EXPENSE_DAY";
+    public static final String COLUMN_EXPENSE_MONTH = "EXPENSE_MONTH";
+    public static final String COLUMN_EXPENSE_YEAR = "EXPENSE_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "budgetTracker2.db", null, 1);
@@ -39,7 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String createAccountTableStatement = "CREATE TABLE " + USER_ACC_TABLE + " (" + COLUMN_ACCOUNT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ACCOUNT_NAME + " TEXT, " + COLUMN_MAIN_ACCOUNT + " BOOL)";
 
         // STATEMENT FOR CREATING EXPENSE TABLE IN DATABASE
-        String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_DATE + " TEXT)";
+        String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_ACCOUNT + ", TEXT" + COLUMN_EXPENSE_DAY + " INTEGER, " + COLUMN_EXPENSE_MONTH + " INTEGER, "+ COLUMN_EXPENSE_YEAR + " INTEGER)";
 
         //  EXECUTION OF THE ABOVE
             db.execSQL(createExpenseTableStatement);
@@ -123,7 +125,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_EXPENSE_DESCRIPTION, expenseModel.getDescription());
         cv.put(COLUMN_EXPENSE_PRICE, expenseModel.getPrice());
         cv.put(COLUMN_EXPENSE_CATEGORY, expenseModel.getCategory());
-        cv.put(COLUMN_EXPENSE_DATE, expenseModel.getDate());
+        cv.put(COLUMN_EXPENSE_ACCOUNT, expenseModel.getAccount());
+        cv.put(COLUMN_EXPENSE_DAY, expenseModel.getDay());
+        cv.put(COLUMN_EXPENSE_MONTH, expenseModel.getMonth());
+        cv.put(COLUMN_EXPENSE_YEAR, expenseModel.getYear());
 
         long insert = db.insert(EXPENSE_TABLE, null, cv);
 
@@ -164,9 +169,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String description = cursor.getString(2);
                 float price = cursor.getFloat(3);
                 String category = cursor.getString(4);
-                String date = cursor.getString(5);
+                String account = cursor.getString(5);
+                int day = cursor.getInt(6);
+                int month = cursor.getInt(7);
+                int year = cursor.getInt(8);
 
-                ExpenseModel newExpense = new ExpenseModel(expenseID, name, description, price, category, date);
+                ExpenseModel newExpense = new ExpenseModel(expenseID, name, description, price, category, account, day, month, year);
                 returnList.add(newExpense);
             }while (cursor.moveToNext());
         }else {
@@ -176,5 +184,4 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
-
 }

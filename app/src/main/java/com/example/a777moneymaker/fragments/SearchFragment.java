@@ -1,12 +1,14 @@
 package com.example.a777moneymaker.fragments;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.widget.Toast;
 
+import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.R;
+import androidx.fragment.app.Fragment;
 
 public class SearchFragment extends Fragment {
 
@@ -16,9 +18,7 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SearchFragment() {
-        //empty constructor
-    }
+    public SearchFragment() {}
 
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -26,6 +26,7 @@ public class SearchFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -41,6 +42,12 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View myView = inflater.inflate(R.layout.fragment_search, container, false);
+
+        if(ApplicationState.getActualAccount()=="Rafal"){
+            Toast.makeText(SearchFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
+        }
+
+        return myView;
     }
 }
