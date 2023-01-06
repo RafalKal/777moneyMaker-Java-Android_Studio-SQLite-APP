@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.777moneyMaker"
+        tools:remove="android:appComponentFactory"
         tools:targetApi="31">
 
         <activity
@@ -28,6 +29,7 @@
         </activity>
 
         <activity android:name="AddExpenseActivity" />
+        <activity android:name="AddAccountActivity" />
         <activity android:name=".SimpleRecyclerViewActivity" />
 
     </application>

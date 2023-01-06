@@ -195,7 +195,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         itemsList.add(expenseModel.toString());
 
         // ADAPTER FOR FILLING THE DATA LISTVIEW
-        adapter = new ArrayAdapter<String>(this, R.layout.row_in_list, itemsList);
+        adapter = new ArrayAdapter<String>(this, R.layout.row_in_expense_list, itemsList);
 
         // FILLING THE LISTVIEW WITH DATA
         itemsListView.setAdapter(adapter);

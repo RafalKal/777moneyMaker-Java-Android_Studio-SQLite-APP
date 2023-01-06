@@ -18,6 +18,18 @@ public class AccountModel {
         this.isMainAcc = isMainAcc;
         this.balance = 0;
     }
+    public AccountModel(int id, String name, boolean isMainAcc, float balance) {
+        this.id = id;
+        this.name = name;
+        this.isMainAcc = isMainAcc;
+        this.balance = balance;
+    }
+
+    public AccountModel(String name, boolean isMainAcc, float balance) {
+        this.name = name;
+        this.isMainAcc = isMainAcc;
+        this.balance = balance;
+    }
 
     @Override
     public String toString() {

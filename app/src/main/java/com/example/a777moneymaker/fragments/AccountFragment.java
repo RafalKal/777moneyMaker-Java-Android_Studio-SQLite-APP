@@ -1,12 +1,16 @@
 package com.example.a777moneymaker.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +21,7 @@ import com.example.a777moneymaker.models.AccountModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class AccountFragment extends Fragment implements View.OnClickListener {
+public class AccountFragment extends Fragment{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -25,14 +29,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
 
-    EditText accountEditText;
-    Switch mainAccountSwitch;
-    Button addAccountButton;
-    Button showAccountsButton;
-    TextView nameTextView;
-    TextView booleanTextView;
-    AccountModel accountModel;
     DataBaseHelper dbHelper;
+    ListView accountListView;
 
 
     public AccountFragment() {}
@@ -62,62 +60,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         View myView = inflater.inflate(R.layout.fragment_account, container, false);
 
-        if(ApplicationState.getActualAccount()=="Rafal"){
-            Toast.makeText(AccountFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
-        }
+        AccountModel accountModel = new AccountModel("Rafal", true);
 
-        addAccountButton = (Button) myView.findViewById(R.id.addAccountButton);
-        showAccountsButton = (Button) myView.findViewById(R.id.showAccountsButton);
-        addAccountButton.setOnClickListener(this);
+        dbHelper = new DataBaseHelper(this.getActivity());
 
-        showAccountsButton.setOnClickListener(new View.OnClickListener() {
+        dbHelper.addAccountModel(accountModel);
+
+        accountListView = myView.findViewById(R.id.accountsListView);
+        SimpleCursorAdapter simpleCursorAdapter = dbHelper.accountLisViewFromDB();
+        accountListView.setAdapter(simpleCursorAdapter);
+        accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-
-                dbHelper = new DataBaseHelper(AccountFragment.this.getActivity());
-
-                List<AccountModel> everyAccount = dbHelper.getEveryAccount();
-
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
-
-//                String currentDateAndTime = sdf.format(new Date());
-//
-//                Toast.makeText(AccountFragment.this.getActivity(), currentDateAndTime, Toast.LENGTH_LONG).show();
-
-                Toast.makeText(AccountFragment.this.getActivity(), everyAccount.toString(), Toast.LENGTH_LONG).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) simpleCursorAdapter.getItem(position);
+                String name = cursor.getString(1);
+                Toast.makeText(AccountFragment.this.getActivity(), name, Toast.LENGTH_LONG).show();
             }
         });
         return myView;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        accountEditText = getView().findViewById(R.id.accountEditText);
-        mainAccountSwitch = getView().findViewById(R.id.mainAccountSwitch);
-        nameTextView = getView().findViewById(R.id.nameTextView);
-        booleanTextView = getView().findViewById(R.id.booleanTextView);
-
-        String accountName = accountEditText.getText().toString();
-        Boolean isMainAccount = (Boolean) mainAccountSwitch.isChecked();
-
-        dbHelper = new DataBaseHelper(AccountFragment.this.getActivity());
-
-        try {
-            nameTextView.setText(accountName);
-            booleanTextView.setText(isMainAccount.toString());
-            accountModel = new AccountModel(accountName, isMainAccount);
-            Toast.makeText(AccountFragment.this.getActivity(), "Udalo sie stworzyc obiekt: accountModel", Toast.LENGTH_LONG).show();
-        }catch (Exception e){
-            Toast.makeText(AccountFragment.this.getActivity(), "Nie udalo sie stworzyc obiektu accountModel", Toast.LENGTH_LONG).show();
-        }
-
-        try {
-            dbHelper.addAccountModel(accountModel);
-            Toast.makeText(AccountFragment.this.getActivity(), "Udalo sie dodac konto do bazy danych", Toast.LENGTH_LONG);
-        }catch (Exception e){
-            Toast.makeText(AccountFragment.this.getActivity(), "Nie udalo sie dodac konta do bazy danych", Toast.LENGTH_LONG);
-        }
     }
 
 }

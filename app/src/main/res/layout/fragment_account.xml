@@ -10,73 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/accountEditText"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="28dp"
-            android:hint="NAZWA KONTA"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <Button
-            android:id="@+id/addAccountButton"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:text="Dodaj konto"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountEditText"
-            app:layout_constraintVertical_bias="0.097"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <Switch
-            android:id="@+id/mainAccountSwitch"
-            android:layout_width="153dp"
-            android:layout_height="51dp"
-            android:text="Switch"
-            app:layout_constraintBottom_toTopOf="@+id/addAccountButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountEditText" />
 
         <TextView
-            android:id="@+id/nameTextView"
+            android:id="@+id/accountsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="name"
+            android:text="Konta / Profile: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addAccountButton" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/booleanTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="boolean"
+        <ListView
+            android:id="@+id/accountsListView"
+            android:layout_width="match_parent"
+            android:layout_height="682dp"
+            android:layout_marginTop="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameTextView"
-            app:layout_constraintVertical_bias="0.058" />
-
-        <Button
-            android:id="@+id/showAccountsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="87dp"
-            android:onClick="show"
-            android:text="show all Accounts from db"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/booleanTextView"
-            app:layout_constraintVertical_bias="0.0" />
-
+            app:layout_constraintTop_toBottomOf="@+id/accountsTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

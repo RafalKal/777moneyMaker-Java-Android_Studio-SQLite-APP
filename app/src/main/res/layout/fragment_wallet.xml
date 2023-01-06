@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.WalletFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -53,25 +52,13 @@
             app:layout_constraintTop_toBottomOf="@+id/balanceText"
             app:layout_constraintVertical_bias="0.55" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/balanceText"
-            app:layout_constraintVertical_bias="0.128" />
-
         <Button
             android:id="@+id/addExpenseButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginBottom="512dp"
             android:background="@drawable/roundedbutton"
-            android:onClick="addExpense"
+            android:onClick="addIncome"
             android:text="+"
             android:textColor="#388e3c"
             android:textColorHint="@color/white"
@@ -83,7 +70,18 @@
             app:layout_constraintTop_toBottomOf="@+id/balanceText"
             app:layout_constraintVertical_bias="0.55" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TRANSAKCJE: "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/balanceText"
+            app:layout_constraintVertical_bias="0.128" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

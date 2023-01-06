@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.SimpleCursorAdapter;
+
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.ExpenseModel;
@@ -12,11 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
+    Context context;
+
     // _ACCOUNTS_ FINAL VARIABLES
     public static final String USER_ACC_TABLE = "USER_ACC_TABLE";
-    public static final String COLUMN_ACCOUNT_ID = "ID_ACCOUNT";
+    public static final String COLUMN_ACCOUNT_ID = "_id";
     public static final String COLUMN_ACCOUNT_NAME = "ACCOUNT_NAME";
     public static final String COLUMN_MAIN_ACCOUNT = "MAIN_ACCOUNT";
+    public static final String COLUMN_ACCOUNT_BALANCE = "ACCOUNT_BALANCE";
 
     // _EXPENSE_ FINAL VARIABLES
     public static final String EXPENSE_TABLE = "EXPENSE_TABLE";
@@ -31,14 +36,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EXPENSE_YEAR = "EXPENSE_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "budgetTracker2.db", null, 1);
+        super(context, "productionProcessDB1.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         // STATEMENT FOR CREATING ACCOUNT TABLE IN DATABASE
-        String createAccountTableStatement = "CREATE TABLE " + USER_ACC_TABLE + " (" + COLUMN_ACCOUNT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ACCOUNT_NAME + " TEXT, " + COLUMN_MAIN_ACCOUNT + " BOOL)";
+        String createAccountTableStatement = "CREATE TABLE " + USER_ACC_TABLE + " (" + COLUMN_ACCOUNT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ACCOUNT_NAME + " TEXT, " + COLUMN_MAIN_ACCOUNT + " BOOL, " + COLUMN_ACCOUNT_BALANCE + " REAL)";
 
         // STATEMENT FOR CREATING EXPENSE TABLE IN DATABASE
         String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_ACCOUNT + ", TEXT" + COLUMN_EXPENSE_DAY + " INTEGER, " + COLUMN_EXPENSE_MONTH + " INTEGER, "+ COLUMN_EXPENSE_YEAR + " INTEGER)";
@@ -63,6 +68,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_ACCOUNT_NAME, accountModel.getName());
         cv.put(COLUMN_MAIN_ACCOUNT, accountModel.isMainAcc());
+        cv.put(COLUMN_ACCOUNT_BALANCE, accountModel.getBalance());
 
         long insert = db.insert(USER_ACC_TABLE, null, cv);
 
@@ -101,8 +107,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 int accountID = cursor.getInt(0);
                 String name = cursor.getString(1);
                 boolean isMainAcc = cursor.getInt(2) == 1 ? true: false;
+                float balance = cursor.getFloat(3);
 
-                AccountModel newAccount = new AccountModel(accountID, name, isMainAcc);
+                AccountModel newAccount = new AccountModel(accountID, name, isMainAcc, balance);
                 returnList.add(newAccount);
             }while (cursor.moveToNext());
         }else {
@@ -111,6 +118,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return returnList;
+    }
+
+    public SimpleCursorAdapter accountLisViewFromDB(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String columns[] = {COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
+        Cursor cursor = db.query(USER_ACC_TABLE, columns, null, null, null, null, null);
+        String[] fromFieldNames = new String[]{COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
+        int[] toVievIDs = new int[]{R.id.accountID, R.id.accountName, R.id.accountIsMain, R.id.accountBalance};
+        if(context!=null) {
+            SimpleCursorAdapter accountAdapter = new SimpleCursorAdapter(
+                    context,
+                    R.layout.row_in_account_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return accountAdapter;
+        }else return null;
     }
 
     // ---------------------\

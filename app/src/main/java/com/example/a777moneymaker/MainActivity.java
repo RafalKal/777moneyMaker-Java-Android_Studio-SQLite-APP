@@ -40,4 +40,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
         startActivity(intent);
     }
+
+    public void addIncome(View view){
+        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
+        startActivity(intent);
+    }
+
+    public void show(View view){
+        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
+        startActivity(intent);
+    }
 }

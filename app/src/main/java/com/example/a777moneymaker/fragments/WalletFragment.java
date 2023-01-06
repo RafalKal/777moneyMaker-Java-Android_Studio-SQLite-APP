@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.a777moneymaker.ApplicationState;
+import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 import androidx.fragment.app.Fragment;
 
 public class WalletFragment extends Fragment {
+
+    DataBaseHelper dbHelper;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -18,7 +21,9 @@ public class WalletFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public WalletFragment() {}
+    public WalletFragment() {
+        // EMPTY CONSTRUCTOR
+    }
 
     public static WalletFragment newInstance(String param1, String param2) {
         WalletFragment fragment = new WalletFragment();
@@ -48,6 +53,7 @@ public class WalletFragment extends Fragment {
         if(ApplicationState.getActualAccount()=="Rafal"){
             Toast.makeText(WalletFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
         }
+
 
         return myView;
     }
