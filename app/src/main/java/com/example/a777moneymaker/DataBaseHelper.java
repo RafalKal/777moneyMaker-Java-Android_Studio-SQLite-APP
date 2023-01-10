@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    Context context;
+    Context context_;
 
     // _ACCOUNTS_ FINAL VARIABLES
     public static final String USER_ACC_TABLE = "USER_ACC_TABLE";
@@ -37,6 +37,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "productionProcessDB1.db", null, 1);
+        context_ = context;
     }
 
     @Override
@@ -120,16 +121,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
-    public SimpleCursorAdapter accountLisViewFromDB(){
-
+    public SimpleCursorAdapter accountListViewFromDB(){
         SQLiteDatabase db = this.getWritableDatabase();
         String columns[] = {COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
         Cursor cursor = db.query(USER_ACC_TABLE, columns, null, null, null, null, null);
         String[] fromFieldNames = new String[]{COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
         int[] toVievIDs = new int[]{R.id.accountID, R.id.accountName, R.id.accountIsMain, R.id.accountBalance};
-        if(context!=null) {
+        if(context_!=null) {
             SimpleCursorAdapter accountAdapter = new SimpleCursorAdapter(
-                    context,
+                    context_,
                     R.layout.row_in_account_list,
                     cursor,
                     fromFieldNames,

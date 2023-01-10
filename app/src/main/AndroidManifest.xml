@@ -28,8 +28,8 @@
                 android:value="" />
         </activity>
 
-        <activity android:name="AddExpenseActivity" />
-        <activity android:name="AddAccountActivity" />
+        <activity android:name=".activities.AddExpenseActivity" />
+        <activity android:name=".activities.AddAccountActivity" />
         <activity android:name=".SimpleRecyclerViewActivity" />
 
     </application>

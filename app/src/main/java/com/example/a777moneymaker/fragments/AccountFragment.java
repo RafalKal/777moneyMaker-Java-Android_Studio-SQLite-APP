@@ -30,7 +30,7 @@ public class AccountFragment extends Fragment{
     private String mParam2;
 
     DataBaseHelper dbHelper;
-    ListView accountListView;
+
 
 
     public AccountFragment() {}
@@ -66,8 +66,14 @@ public class AccountFragment extends Fragment{
 
         dbHelper.addAccountModel(accountModel);
 
-        accountListView = myView.findViewById(R.id.accountsListView);
-        SimpleCursorAdapter simpleCursorAdapter = dbHelper.accountLisViewFromDB();
+        ListView accountListView = myView.findViewById(R.id.accountsListView);
+
+        if(dbHelper.accountListViewFromDB()==null){
+            Toast.makeText(AccountFragment.this.getActivity(), "function is null", Toast.LENGTH_LONG).show();
+        }
+
+        SimpleCursorAdapter simpleCursorAdapter = dbHelper.accountListViewFromDB();
+
         accountListView.setAdapter(simpleCursorAdapter);
         accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,6 +83,7 @@ public class AccountFragment extends Fragment{
                 Toast.makeText(AccountFragment.this.getActivity(), name, Toast.LENGTH_LONG).show();
             }
         });
+
         return myView;
     }
 

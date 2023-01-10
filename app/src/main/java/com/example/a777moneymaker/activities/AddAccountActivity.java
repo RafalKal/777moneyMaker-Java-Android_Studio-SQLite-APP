@@ -1,26 +1,17 @@
-package com.example.a777moneymaker;
+package com.example.a777moneymaker.activities;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.a777moneymaker.fragments.AccountFragment;
+import com.example.a777moneymaker.ApplicationState;
+import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.models.AccountModel;
-import com.example.a777moneymaker.models.ExpenseModel;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class AddAccountActivity extends AppCompatActivity {

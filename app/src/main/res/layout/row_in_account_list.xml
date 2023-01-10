@@ -17,23 +17,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/balanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saldo: "
+            android:textSize="20sp"></TextView>
+
         <TextView
             android:id="@+id/accountBalance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Balance"
+            android:textSize="20sp"></TextView>
+
+        <TextView
+            android:id="@+id/isMainAccountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" PLN,   Czy glówne konto: "
             android:textSize="20sp">
+            <!--            android:visibility="invisible">-->
         </TextView>
 
         <TextView
             android:id="@+id/accountIsMain"
-            android:layout_width="wrap_content"
+            android:layout_width="99dp"
             android:layout_height="wrap_content"
-            android:text="IsMainAccount"
-            android:textSize="20sp"
-            android:visibility="invisible">
+            android:textSize="20sp">
+            <!--            android:visibility="invisible">-->
         </TextView>
 
         <TextView
@@ -42,8 +56,7 @@
             android:layout_height="wrap_content"
             android:text="Account ID"
             android:textSize="15sp"
-            android:visibility="invisible">
-        </TextView>
+            android:visibility="invisible"></TextView>
 
     </LinearLayout>
 
