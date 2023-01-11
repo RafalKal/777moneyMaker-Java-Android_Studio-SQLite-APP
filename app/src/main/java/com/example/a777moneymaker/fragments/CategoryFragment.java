@@ -43,9 +43,8 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_category, container, false);
 
-        if(ApplicationState.getActualAccount()=="Rafal"){
-            Toast.makeText(CategoryFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(CategoryFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
+
 
         return myView;
     }

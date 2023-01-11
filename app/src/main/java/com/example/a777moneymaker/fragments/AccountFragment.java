@@ -1,6 +1,9 @@
 package com.example.a777moneymaker.fragments;
 
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,19 +33,19 @@ public class AccountFragment extends Fragment{
     private String mParam2;
 
     DataBaseHelper dbHelper;
+    ListView accountListView;
+    SimpleCursorAdapter simpleCursorAdapter;
 
-
-
-    public AccountFragment() {}
+    public AccountFragment() {
+        // EMPTY CONSTRUCTOR
+    }
 
     public static AccountFragment newInstance(String param1, String param2) {
-
         AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -56,35 +59,76 @@ public class AccountFragment extends Fragment{
     }
 
     @Override
+    public void onResume() {
+        simpleCursorAdapter = dbHelper.accountListViewFromDB();
+        accountListView.setAdapter(simpleCursorAdapter);
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        // VIEW INITIATION, USES XML
         View myView = inflater.inflate(R.layout.fragment_account, container, false);
 
-        AccountModel accountModel = new AccountModel("Rafal", true);
-
+        // DB HELPER FOR ADD ACCOUNT TO DATABASE
         dbHelper = new DataBaseHelper(this.getActivity());
 
-        dbHelper.addAccountModel(accountModel);
-
-        ListView accountListView = myView.findViewById(R.id.accountsListView);
+        // ASSIGNING VIEWS FROM RESOURCES TO OBJECTS
+        accountListView = myView.findViewById(R.id.accountsListView);
 
         if(dbHelper.accountListViewFromDB()==null){
             Toast.makeText(AccountFragment.this.getActivity(), "function is null", Toast.LENGTH_LONG).show();
         }
 
-        SimpleCursorAdapter simpleCursorAdapter = dbHelper.accountListViewFromDB();
+        simpleCursorAdapter = dbHelper.accountListViewFromDB();
 
+        // PILLS THE LIST WITH RECORDS FROM THE DATABASE
         accountListView.setAdapter(simpleCursorAdapter);
+
+        // WHEN CLICKED- COLORS THE SELECTED ROWS AND TELLS YOU (BY TOAST) WHICH ROW HAS BEEN SELECTED
         accountListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Cursor cursor = (Cursor) simpleCursorAdapter.getItem(position);
+
+                int accountID = cursor.getInt(0);
                 String name = cursor.getString(1);
-                Toast.makeText(AccountFragment.this.getActivity(), name, Toast.LENGTH_LONG).show();
+
+                ApplicationState.setActualAccountModel(dbHelper.getAccountModelByID(accountID));
+
+                // COLOURS GREEN
+                int color = Color.TRANSPARENT;
+                Drawable background = view.getBackground();
+                if (background instanceof ColorDrawable)
+                    color = ((ColorDrawable) background).getColor();
+                if(color != getResources().getColor(R.color.colorGreen))
+                    view.setBackgroundColor(getResources().getColor(R.color.colorGreen));
+
+                // COLOURS WHITE OTHERS
+                for (int i = 0; i < accountListView.getCount(); i++) {
+                    if (i != position) {
+                        getViewByPosistion(i, accountListView).setBackgroundColor(Color.WHITE);
+                    }
+                }
+                Toast.makeText(AccountFragment.this.getActivity(), "Ustawiono jako aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_SHORT).show();
             }
         });
-
         return myView;
+    }
+
+    // GET LISTVIEW ROW PASSING INDEX PARAMETER
+    public View getViewByPosistion(int position, ListView listView){
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+
+        if(position < firstListItemPosition || position > lastListItemPosition){
+            return listView.getAdapter().getView(position, null, listView);
+        }else {
+            final int childIndex = position - firstListItemPosition;
+            return listView.getChildAt(childIndex);
+        }
     }
 
 }

@@ -75,7 +75,6 @@
         android:layout_centerHorizontal="true"
         android:background="@android:drawable/btn_dropdown" />
 
-
     <TextView
         android:id="@+id/selectDateTextView"
         android:layout_width="wrap_content"

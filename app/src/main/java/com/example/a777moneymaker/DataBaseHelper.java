@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.SimpleCursorAdapter;
-
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.ExpenseModel;
@@ -36,7 +35,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EXPENSE_YEAR = "EXPENSE_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "productionProcessDB1.db", null, 1);
+        super(context, "productionProcessDB2.db", null, 1);
         context_ = context;
     }
 
@@ -50,13 +49,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_ACCOUNT + ", TEXT" + COLUMN_EXPENSE_DAY + " INTEGER, " + COLUMN_EXPENSE_MONTH + " INTEGER, "+ COLUMN_EXPENSE_YEAR + " INTEGER)";
 
         //  EXECUTION OF THE ABOVE
-            db.execSQL(createExpenseTableStatement);
-            db.execSQL(createAccountTableStatement);
+        db.execSQL(createExpenseTableStatement);
+        db.execSQL(createAccountTableStatement);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
     // ---------------------\
@@ -114,11 +112,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 returnList.add(newAccount);
             }while (cursor.moveToNext());
         }else {
-            // empty section
+            // EMPTY SECTION
         }
         cursor.close();
         db.close();
         return returnList;
+    }
+
+    public AccountModel getAccountModelByID(int id){
+        for (int i = 0; i < getEveryAccount().size(); i++){
+            if(getEveryAccount().get(i).getId() == id){
+                return getEveryAccount().get(i);
+            }
+        }
+        return null;
+    }
+
+    public AccountModel getAccountModelByName(String name){
+        for (int i = 0; i < getEveryAccount().size(); i++){
+            if(getEveryAccount().get(i).getName() == name){
+                return getEveryAccount().get(i);
+            }
+        }
+        return null;
     }
 
     public SimpleCursorAdapter accountListViewFromDB(){
@@ -204,7 +220,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 returnList.add(newExpense);
             }while (cursor.moveToNext());
         }else {
-            // empty section
+            // EMPTY SECTION
         }
         cursor.close();
         db.close();

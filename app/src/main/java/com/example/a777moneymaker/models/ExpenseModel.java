@@ -11,7 +11,6 @@ public class ExpenseModel {
     private int month;
     private int year;
 
-
     public ExpenseModel(int id, String name, String description, float price, String category, String account, int day, int month, int year) {
         this.id = id;
         this.name = name;
@@ -128,5 +127,7 @@ public class ExpenseModel {
         this.account = account;
     }
 
-    public ExpenseModel(){}
+    public ExpenseModel(){
+        // EMPTY CONSTRUCTOR
+    }
 }

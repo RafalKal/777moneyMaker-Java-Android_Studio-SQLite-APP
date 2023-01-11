@@ -44,9 +44,7 @@ public class ContactUsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_contact_us, container, false);
 
-        if(ApplicationState.getActualAccount()=="Rafal"){
-            Toast.makeText(ContactUsFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(ContactUsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
 
         return myView;
     }

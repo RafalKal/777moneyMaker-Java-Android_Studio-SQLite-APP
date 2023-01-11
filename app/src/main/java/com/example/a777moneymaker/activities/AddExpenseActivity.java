@@ -162,7 +162,7 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         dbHelper = new DataBaseHelper(AddExpenseActivity.this);
 
-        expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
+        //expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
 
         try {
             dbHelper.addExpenseModel(expenseModel);
@@ -176,7 +176,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     // '+' BUTTON
-    public void addToShoppingList(View view) throws ParseException {
+    public void addToShoppingList(View view){
 
         // LINKING TO COMPONENTS FROM XML LAYOUT USING ID
         nameTextView = findViewById(R.id.expenseName);
@@ -192,7 +192,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         String date = (String) dateButton.getText();
 
         // NEW EXPENSE OBJECT
-        expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
+        //expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
 
         // ADDING NEW STRING TO ARRAYLIST
         itemsList.add(expenseModel.toString());

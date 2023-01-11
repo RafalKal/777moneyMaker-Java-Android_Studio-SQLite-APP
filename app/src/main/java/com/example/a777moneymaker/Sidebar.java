@@ -3,7 +3,6 @@ package com.example.a777moneymaker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Sidebar extends AppCompatActivity {

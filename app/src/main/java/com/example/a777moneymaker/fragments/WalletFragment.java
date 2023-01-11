@@ -50,9 +50,8 @@ public class WalletFragment extends Fragment {
 
         View myView = inflater.inflate(R.layout.fragment_wallet, container, false);
 
-        if(ApplicationState.getActualAccount()=="Rafal"){
-            Toast.makeText(WalletFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(WalletFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
+
 
 
         return myView;

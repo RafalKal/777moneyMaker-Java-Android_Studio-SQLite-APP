@@ -45,9 +45,8 @@ public class SettingsFragment extends Fragment {
 
         View myView = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        if(ApplicationState.getActualAccount()=="Rafal"){
-            Toast.makeText(SettingsFragment.this.getActivity(), "aktualne konto: Rafal", Toast.LENGTH_LONG).show();
-        }
+        Toast.makeText(SettingsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
+
 
         return myView;
     }

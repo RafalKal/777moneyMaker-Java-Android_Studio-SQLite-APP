@@ -31,10 +31,12 @@ public class CategoryModel {
 
     @Override
     public String toString() {
-        return "id= " + id + ", nazwa= " + name;
+        return       "id= " + id +
+                ", nazwa= " + name;
     }
 
     public CategoryModel() {
+        // EMPTY CONSTUCTOR
     }
 }
 
