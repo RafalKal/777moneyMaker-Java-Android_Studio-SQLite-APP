@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@id/layoutToolBar"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/navHostFragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+            class ="androidx.navigation.fragment.NavHostFragment"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main" />
 

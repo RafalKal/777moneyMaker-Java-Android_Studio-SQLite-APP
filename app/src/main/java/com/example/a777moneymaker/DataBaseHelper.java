@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.SimpleCursorAdapter;
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.models.AccountModel;
+import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.ExpenseModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MAIN_ACCOUNT = "MAIN_ACCOUNT";
     public static final String COLUMN_ACCOUNT_BALANCE = "ACCOUNT_BALANCE";
 
+    // _CATEGORY_ FINAL VARIABLES
+    public static final String CATEGORY_TABLE = "CATEGORY_TABLE";
+    public static final String COLUMN_CATEGORY_ID = "_id";
+    public static final String COLUMN_CATEGORY_NAME = "CATEGORY_NAME";
+
     // _EXPENSE_ FINAL VARIABLES
     public static final String EXPENSE_TABLE = "EXPENSE_TABLE";
     public static final String COLUMN_EXPENSE_ID = "ID_EXPENSE";
@@ -35,7 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EXPENSE_YEAR = "EXPENSE_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "productionProcessDB2.db", null, 1);
+        super(context, "productionProcessDB3.db", null, 1);
         context_ = context;
     }
 
@@ -45,17 +51,116 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // STATEMENT FOR CREATING ACCOUNT TABLE IN DATABASE
         String createAccountTableStatement = "CREATE TABLE " + USER_ACC_TABLE + " (" + COLUMN_ACCOUNT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ACCOUNT_NAME + " TEXT, " + COLUMN_MAIN_ACCOUNT + " BOOL, " + COLUMN_ACCOUNT_BALANCE + " REAL)";
 
+        // STATEMENT FOR CREATING ACCOUNT TABLE IN DATABASE
+        String createCategoryTableStatement = "CREATE TABLE " + CATEGORY_TABLE + " (" + COLUMN_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_CATEGORY_NAME + " TEXT)";
+
         // STATEMENT FOR CREATING EXPENSE TABLE IN DATABASE
         String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_ACCOUNT + ", TEXT" + COLUMN_EXPENSE_DAY + " INTEGER, " + COLUMN_EXPENSE_MONTH + " INTEGER, "+ COLUMN_EXPENSE_YEAR + " INTEGER)";
 
         //  EXECUTION OF THE ABOVE
         db.execSQL(createExpenseTableStatement);
         db.execSQL(createAccountTableStatement);
+        db.execSQL(createCategoryTableStatement);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
+
+    // ---------------------\
+    // _CATEGORY_ FUNCTIONS  |
+    // ---------------------/
+    public boolean addCategoryModel(CategoryModel categoryModel){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_CATEGORY_NAME, categoryModel.getName());
+
+        long insert = db.insert(CATEGORY_TABLE, null, cv);
+
+        if (insert == -1){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean deleteCategoryModel(CategoryModel categoryModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "DELETE FROM " + CATEGORY_TABLE + " WHERE " + COLUMN_CATEGORY_ID + " = " + categoryModel.getId();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public List<CategoryModel> getEveryCategory() {
+        List<CategoryModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + CATEGORY_TABLE  ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                int categoryID = cursor.getInt(0);
+                String name = cursor.getString(1);
+
+                CategoryModel newCategory = new CategoryModel(categoryID, name);
+                returnList.add(newCategory);
+            }while (cursor.moveToNext());
+        }else {
+            // EMPTY SECTION
+        }
+        cursor.close();
+        db.close();
+        return returnList;
+    }
+
+    public CategoryModel getCategroytModelByID(int id){
+        for (int i = 0; i < getEveryCategory().size(); i++){
+            if(getEveryAccount().get(i).getId() == id){
+                return getEveryCategory().get(i);
+            }
+        }
+        return null;
+    }
+
+    public CategoryModel getCategoryModelByName(String name){
+        for (int i = 0; i < getEveryCategory().size(); i++){
+            if(getEveryCategory().get(i).getName() == name){
+                return getEveryCategory().get(i);
+            }
+        }
+        return null;
+    }
+
+    public SimpleCursorAdapter categoryListViewFromDB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String columns[] = {COLUMN_CATEGORY_ID, COLUMN_CATEGORY_NAME};
+        Cursor cursor = db.query(CATEGORY_TABLE, columns, null, null, null, null, null);
+        String[] fromFieldNames = new String[]{COLUMN_CATEGORY_ID, COLUMN_CATEGORY_NAME};
+        int[] toVievIDs = new int[]{R.id.categoryID, R.id.categoryName};
+        if(context_!=null) {
+            SimpleCursorAdapter accountAdapter = new SimpleCursorAdapter(
+                    context_,
+                    R.layout.row_in_category_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return accountAdapter;
+        }else return null;
+    }
+
 
     // ---------------------\
     // _ACCOUNT_ FUNCTIONS  |

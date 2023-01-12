@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import com.example.a777moneymaker.activities.AddAccountActivity;
+import com.example.a777moneymaker.activities.AddCategoryActivity;
 import com.example.a777moneymaker.activities.AddExpenseActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -54,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToAddAccount(View view){
         Intent intent = new Intent(getApplicationContext(), AddAccountActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToAddCategory(View view){
+        Intent intent = new Intent(getApplicationContext(), AddCategoryActivity.class);
         startActivity(intent);
     }
 }

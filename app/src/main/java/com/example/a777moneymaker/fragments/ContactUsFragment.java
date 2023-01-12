@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.Toast;
-
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.R;
 import androidx.fragment.app.Fragment;
@@ -44,7 +43,9 @@ public class ContactUsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_contact_us, container, false);
 
-        Toast.makeText(ContactUsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
+        if(ApplicationState.getActualAccountModel() != null){
+            Toast.makeText(ContactUsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
+        }
 
         return myView;
     }

@@ -1,26 +1,18 @@
 package com.example.a777moneymaker.activities;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
-import com.example.a777moneymaker.fragments.AccountFragment;
 import com.example.a777moneymaker.models.AccountModel;
-
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class AddAccountActivity extends AppCompatActivity {
 
@@ -29,7 +21,6 @@ public class AddAccountActivity extends AppCompatActivity {
     EditText balanceEditText;
     Switch isMainAccSwitch;
     Button addAccountButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +31,9 @@ public class AddAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_account_activity);
 
-        Toast.makeText(AddAccountActivity.this, "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
-
+        if(ApplicationState.getActualAccountModel() != null){
+            Toast.makeText(AddAccountActivity.this, "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
+        }
         addAccountButton = findViewById(R.id.addAccountButton);
 
     }

@@ -5,24 +5,17 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
+import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
-import com.example.a777moneymaker.models.AccountModel;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class AccountFragment extends Fragment{
 
@@ -112,7 +105,7 @@ public class AccountFragment extends Fragment{
                         getViewByPosistion(i, accountListView).setBackgroundColor(Color.WHITE);
                     }
                 }
-                Toast.makeText(AccountFragment.this.getActivity(), "Ustawiono jako aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AccountFragment.this.getActivity(), "Ustawiono jako aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_SHORT).show();
             }
         });
         return myView;

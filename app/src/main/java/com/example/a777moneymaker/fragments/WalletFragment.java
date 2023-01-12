@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.widget.ListView;
 import android.widget.Toast;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
@@ -50,9 +49,9 @@ public class WalletFragment extends Fragment {
 
         View myView = inflater.inflate(R.layout.fragment_wallet, container, false);
 
-        Toast.makeText(WalletFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.toString_(), Toast.LENGTH_LONG).show();
-
-
+        if(ApplicationState.getActualAccountModel() != null){
+            Toast.makeText(WalletFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
+        }
 
         return myView;
     }
