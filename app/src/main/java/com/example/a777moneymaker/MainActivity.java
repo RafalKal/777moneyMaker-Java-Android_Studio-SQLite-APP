@@ -3,6 +3,8 @@ package com.example.a777moneymaker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.a777moneymaker.activities.AddAccountActivity;
 import com.example.a777moneymaker.activities.AddCategoryActivity;
 import com.example.a777moneymaker.activities.AddExpenseActivity;
+import com.example.a777moneymaker.activities.AddIncomeActivity_v1;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.navHostFragment);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        DataBaseHelper dbHelper = new DataBaseHelper(MainActivity.this);
+        ApplicationState.setActualAccountModel(dbHelper.getAccountModelByID(1));
+    }
+
+    public void showTransactions(View view){
+        DataBaseHelper dbHelper = new DataBaseHelper(this);
+        Toast.makeText(this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public void addExpense(View view){
@@ -44,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addIncome(View view){
-        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
+        Intent intent = new Intent(getApplicationContext(), AddIncomeActivity_v1.class);
         startActivity(intent);
     }
 

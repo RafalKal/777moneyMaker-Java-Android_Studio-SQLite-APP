@@ -16,21 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
-import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.ExpenseModel;
-import com.google.android.material.textfield.TextInputLayout;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddExpenseActivity extends AppCompatActivity {
+public class AddIncomeActivity_v1 extends AppCompatActivity {
 
-    EditText nameTextInput;
-    EditText priceTextInput;
+    EditText nameTextView;
+    EditText priceTextView;
     Button addToShoppingListButton;
     Spinner categorySpinner;
     DatePickerDialog datePickerDialog;
-    EditText descriptionTextInput;
     Button dateButton;
     ExpenseModel expenseModel;
     DataBaseHelper dbHelper;
@@ -44,7 +40,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // OPEN DATABASE HELPER / CONTROLLER
-        dbHelper = new DataBaseHelper(AddExpenseActivity.this);
+        dbHelper = new DataBaseHelper(AddIncomeActivity_v1.this);
 
         // INIT LAYOUT FROM XML
         super.onCreate(savedInstanceState);
@@ -55,15 +51,8 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         // CATEGORY SPINNER
         Spinner dropdown = findViewById(R.id.categorySpinner);
-
-        CategoryModel[] categoriesObjects = dbHelper.getEveryCategory().toArray(new CategoryModel[0]);
-        String[] categories = new String[categoriesObjects.length];
-        for(int i = 0; i < categories.length; i++) {
-            categories[i] = categoriesObjects[i].getName();
-        }
-
+        String[] categories = {"Jedzenie", "Napoje", "Paliwo", "Komunikacja", "Alkohol", "Papierosy", "Rozrywka", "Edukacja"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
 
@@ -92,7 +81,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     }
 
     //--------------------------------------------------------------------------------------\
-    // FUNCTIONS FOR DATE PICKER                                                            |
+    // FUNCTIONS FOR DATA PICKER                                                            |
     //--------------------------------------------------------------------------------------/
     private String getMonthFormat(int month){
         if(month==1)
@@ -126,11 +115,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        month++;
+        month = month + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        dayA = day;
-        monthA = month;
-        yearA = year;
 
         return makeDateString(day, month, year);
     }
@@ -139,7 +125,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                month++;
+                month = month + 1;
 
                 String date = makeDateString(day, month, year);
                 dateButton.setText(date);
@@ -170,14 +156,14 @@ public class AddExpenseActivity extends AppCompatActivity {
 
     public void submitAddExpense(View view) {
 
-        dbHelper = new DataBaseHelper(AddExpenseActivity.this);
+        dbHelper = new DataBaseHelper(AddIncomeActivity_v1.this);
 
         try {
             dbHelper.addExpenseModel(expenseModel);
-            Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity_v1.this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
-            Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity_v1.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
         finish();
@@ -187,21 +173,20 @@ public class AddExpenseActivity extends AppCompatActivity {
     public void addToShoppingList(View view){
 
         // LINKING TO COMPONENTS FROM XML LAYOUT USING ID
-        nameTextInput = findViewById(R.id.expenseName);
-        priceTextInput = findViewById(R.id.expensePrice);
+        nameTextView = findViewById(R.id.expenseName);
+        priceTextView = findViewById(R.id.expensePrice);
         categorySpinner = findViewById(R.id.categorySpinner);
-        descriptionTextInput = findViewById(R.id.descriptionTextInput);
         dateButton.getText();
 
         // GET TEXTS FROM INPUTS
-        String name = nameTextInput.getText().toString();
-        String description = descriptionTextInput.getText().toString();
-        float price = Float.parseFloat(priceTextInput.getText().toString());
+        String name = nameTextView.getText().toString();
+        String description = "*opis*";
+        float price = Float.parseFloat(priceTextView.getText().toString());
         String category = categorySpinner.getSelectedItem().toString();
         String date = (String) dateButton.getText();
 
         if(ApplicationState.getActualAccountModel() != null) {
-            expenseModel = new ExpenseModel(name, description, price, category, ApplicationState.getActualAccountModel().getName(), "WYDATEK", dayA, monthA, yearA);
+            expenseModel = new ExpenseModel(name, description, price, category, ApplicationState.getActualAccountModel().getName(), "WPŁYW", 10, 10, 2023);
             // ADDING NEW STRING TO ARRAYLIST
             itemsList.add(expenseModel.toString());
 
@@ -212,17 +197,10 @@ public class AddExpenseActivity extends AppCompatActivity {
             itemsListView.setAdapter(adapter);
 
             // SET INPUTS TO DEFAULT INITIAL VALUES
-            nameTextInput.setText(null);
-            priceTextInput.setText(null);
-            descriptionTextInput.setText(null);
+            nameTextView.setText(null);
+            priceTextView.setText(null);
         }else {
-            Toast.makeText(AddExpenseActivity.this, "Nie ma konta, do którego można przypisać Wydatek", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity_v1.this, "Nie ma konta, do którego można przypisać Wydatek", Toast.LENGTH_LONG).show();
         }
     }
-
-    public String monthFormatter(int month){
-        if(month < 10) return "0" + month;
-        else return String.valueOf(month);
-    }
-
 }

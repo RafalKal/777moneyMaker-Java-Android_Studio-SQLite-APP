@@ -25,13 +25,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Saldo: "
-            android:textSize="20sp"></TextView>
+            android:textSize="20sp">
+        </TextView>
 
         <TextView
             android:id="@+id/accountBalance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"></TextView>
+            android:textSize="20sp">
+        </TextView>
 
         <TextView
             android:id="@+id/isMainAccountLabel"
@@ -39,7 +41,6 @@
             android:layout_height="wrap_content"
             android:text=" PLN,   Czy glówne konto: "
             android:textSize="20sp">
-            <!--            android:visibility="invisible">-->
         </TextView>
 
         <TextView
@@ -47,7 +48,6 @@
             android:layout_width="99dp"
             android:layout_height="wrap_content"
             android:textSize="20sp">
-            <!--            android:visibility="invisible">-->
         </TextView>
 
         <TextView
@@ -56,7 +56,8 @@
             android:layout_height="wrap_content"
             android:text="Account ID"
             android:textSize="15sp"
-            android:visibility="invisible"></TextView>
+            android:visibility="invisible">
+        </TextView>
 
     </LinearLayout>
 

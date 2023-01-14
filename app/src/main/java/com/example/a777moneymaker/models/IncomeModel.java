@@ -1,37 +1,34 @@
 package com.example.a777moneymaker.models;
 
-public class ExpenseModel {
+public class IncomeModel {
     private int id;
     private String name;
     private String description;
     private float price;
     private String category;
     private String account;
-    private String type;
     private int day;
     private int month;
     private int year;
 
-    public ExpenseModel(int id, String name, String description, float price, String category, String account, String type, int day, int month, int year) {
+    public IncomeModel(int id, String name, String description, float price, String category, String account, int day, int month, int year) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.account = account;
-        this.type = type;
         this.day = day;
         this.month = month;
         this.year = year;
     }
 
-    public ExpenseModel(String name, String description, float price, String category, String account, String type, int day, int month, int year) {
+    public IncomeModel(String name, String description, float price, String category, String account, int day, int month, int year) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
         this.account = account;
-        this.type = type;
         this.day = day;
         this.month = month;
         this.year = year;
@@ -45,7 +42,6 @@ public class ExpenseModel {
                 + ", cena= "       + price
                 + ", kategoria= "  + category
                 + ", konto= "      + account
-                + ", typ= "      + type
                 + ", data= "       + day + "." + month + "." + year;
     }
 
@@ -87,14 +83,6 @@ public class ExpenseModel {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getDay() {
@@ -139,7 +127,7 @@ public class ExpenseModel {
         this.account = account;
     }
 
-    public ExpenseModel(){
+    public IncomeModel(){
         // EMPTY CONSTRUCTOR
     }
 }
