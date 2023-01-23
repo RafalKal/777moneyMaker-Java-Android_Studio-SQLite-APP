@@ -524,7 +524,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()) {
             do {
-                int incomeID = cursor.getInt(0);
+                 int incomeID = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String description = cursor.getString(2);
                 float price = cursor.getFloat(3);
