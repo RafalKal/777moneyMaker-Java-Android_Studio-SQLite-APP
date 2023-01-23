@@ -18,8 +18,6 @@ import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.ExpenseModel;
-import com.google.android.material.textfield.TextInputLayout;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 

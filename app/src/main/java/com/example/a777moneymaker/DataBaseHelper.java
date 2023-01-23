@@ -107,9 +107,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteCategoryModel(CategoryModel categoryModel){
+    public boolean deleteCategoryModel(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + CATEGORY_TABLE + " WHERE " + COLUMN_CATEGORY_ID + " = " + categoryModel.getId();
+        String queryString = "DELETE FROM " + CATEGORY_TABLE + " WHERE " + COLUMN_CATEGORY_ID + " = " + id;
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public boolean editCategoryModel(int id, String categoryName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "UPDATE " + CATEGORY_TABLE + " SET " + COLUMN_CATEGORY_NAME + " = \"" + categoryName + "\" WHERE " + COLUMN_CATEGORY_ID + " = " + id;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -217,6 +230,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean editAccountModel(int id, String accountName, float balance){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+//        String queryString = "UPDATE " + USER_ACC_TABLE + " SET " + COLUMN_ACCOUNT_NAME + " = \"" + accountName + "\", SET " + COLUMN_ACCOUNT_BALANCE + " = " + balance + " WHERE " + COLUMN_ACCOUNT_ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_ACCOUNT_NAME, accountName);
+        values.put(COLUMN_ACCOUNT_BALANCE, balance);
+
+        db.update(USER_ACC_TABLE, values, "_id = " + id, null);
+        db.close();
+
+//        Cursor cursor = db.rawQuery(queryString, null);
+//
+//        if(cursor.moveToFirst()) {
+//            return true;
+//        }else {
+//            return false;
+//        }
+        return false;
+    }
+
     public List<AccountModel> getEveryAccount() {
         List<AccountModel> returnList = new ArrayList<>();
 
@@ -321,6 +357,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean editExpenseAfterEditingAccount(String accountNameOld, String newAccountName){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+//        String queryString = "UPDATE " + USER_ACC_TABLE + " SET " + COLUMN_ACCOUNT_NAME + " = \"" + accountName + "\", SET " + COLUMN_ACCOUNT_BALANCE + " = " + balance + " WHERE " + COLUMN_ACCOUNT_ID + " = " + id;
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EXPENSE_ACCOUNT, newAccountName);
+
+        db.update(EXPENSE_TABLE, values, COLUMN_EXPENSE_ACCOUNT + " = \"" + accountNameOld + "\"", null);
+        db.close();
+
+//        Cursor cursor = db.rawQuery(queryString, null);
+//
+//        if(cursor.moveToFirst()) {
+//            return true;
+//        }else {
+//            return false;
+//        }
+        return false;
+    }
+
     public List<ExpenseModel> getEveryExpense() {
         List<ExpenseModel> returnList = new ArrayList<>();
 
@@ -351,10 +409,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+        //Collections.reverse(returnList);
         return returnList;
     }
 
-    public SimpleCursorAdapter transactionListViewFromDB(){
+    public SimpleCursorAdapter transactionListViewFromDB(String account){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String columns[] = {
@@ -370,7 +429,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             COLUMN_EXPENSE_YEAR
                             };
 
-        Cursor cursor = db.query(EXPENSE_TABLE, columns, null, null, null, null, null);
+        String query = "SELECT * FROM EXPENSE_TABLE WHERE " + COLUMN_EXPENSE_ACCOUNT + " = \"" + account + "\" ORDER BY "+ COLUMN_EXPENSE_ID + " DESC";
+
+        //Cursor cursor = db.query(EXPENSE_TABLE, columns, null, null, null, null, COLUMN_EXPENSE_ID + " DESC");
+
+        Cursor cursor = db.rawQuery(query, null);
 
         String[] fromFieldNames = new String[]{
                                                 COLUMN_EXPENSE_ID,
@@ -481,5 +544,4 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
-
 }

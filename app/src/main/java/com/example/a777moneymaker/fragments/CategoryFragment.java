@@ -1,9 +1,15 @@
 package com.example.a777moneymaker.fragments;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -19,9 +25,15 @@ public class CategoryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    DataBaseHelper dbHelper;
-    ListView categoryListView;
-    SimpleCursorAdapter simpleCursorAdapter;
+    private DataBaseHelper dbHelper;
+    private ListView categoryListView;
+    private SimpleCursorAdapter simpleCursorAdapter;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText categoryNameEditText;
+    private Button submitButton;
+    private Button deleteButton;
 
     public CategoryFragment() {
         // EMPTY CONSTRUCTOR
@@ -49,6 +61,7 @@ public class CategoryFragment extends Fragment {
     public void onResume() {
         simpleCursorAdapter = dbHelper.categoryListViewFromDB();
         categoryListView.setAdapter(simpleCursorAdapter);
+
         super.onResume();
     }
 
@@ -73,6 +86,50 @@ public class CategoryFragment extends Fragment {
         // PILLS THE LIST WITH RECORDS FROM THE DATABASE
         categoryListView.setAdapter(simpleCursorAdapter);
 
+        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) simpleCursorAdapter.getItem(position);
+                int categoryID = cursor.getInt(0);
+                String name = cursor.getString(1);
+
+                createCategoryEditDialog(categoryID, name);
+            }
+        });
+
+
+
         return myView;
+    }
+
+    public void createCategoryEditDialog(int categoryID, String name){
+        dialogBuilder = new AlertDialog.Builder(this.getActivity());
+        final View categoryEditPopupView = getLayoutInflater().inflate(R.layout.popup_category_edit, null);
+
+        categoryNameEditText = categoryEditPopupView.findViewById(R.id.categoryNameEditText);
+        submitButton = categoryEditPopupView.findViewById(R.id.submitButton);
+        deleteButton = categoryEditPopupView.findViewById(R.id.deleteCategoryButton);
+
+        categoryNameEditText.setText(name);
+
+        dialogBuilder.setView(categoryEditPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.editCategoryModel(categoryID, categoryNameEditText.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.deleteCategoryModel(categoryID);
+                dialog.dismiss();
+            }
+        });
     }
 }

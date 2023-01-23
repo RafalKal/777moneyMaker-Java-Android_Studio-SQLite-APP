@@ -1,5 +1,6 @@
 package com.example.a777moneymaker.fragments;
 
+import android.app.AlertDialog;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -28,6 +31,13 @@ public class AccountFragment extends Fragment{
     DataBaseHelper dbHelper;
     ListView accountListView;
     SimpleCursorAdapter simpleCursorAdapter;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText accountNameEditText;
+    private EditText accountBalanceEditText;
+    private Button editAccountButton;
+    private Button deleteAccountButton;
 
     public AccountFragment() {
         // EMPTY CONSTRUCTOR
@@ -108,6 +118,23 @@ public class AccountFragment extends Fragment{
                 Toast.makeText(AccountFragment.this.getActivity(), "Ustawiono jako aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        accountListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Cursor cursor = (Cursor) simpleCursorAdapter.getItem(position);
+
+                int accountID = cursor.getInt(0);
+                String name = cursor.getString(1);
+                float balance = cursor.getFloat(3);
+
+                createAccountEditDialog(accountID, name, balance);
+
+                return false;
+            }
+        });
+
         return myView;
     }
 
@@ -122,6 +149,40 @@ public class AccountFragment extends Fragment{
             final int childIndex = position - firstListItemPosition;
             return listView.getChildAt(childIndex);
         }
+    }
+
+    public void createAccountEditDialog(int accountID, String name, float balance){
+        dialogBuilder = new AlertDialog.Builder(this.getActivity());
+        final View accountEditPopupView = getLayoutInflater().inflate(R.layout.popup_account_edit, null);
+
+        accountNameEditText = accountEditPopupView.findViewById(R.id.accountNameEditText);
+        accountBalanceEditText = accountEditPopupView.findViewById(R.id.accountBalanceEditText);
+        editAccountButton = accountEditPopupView.findViewById(R.id.editAccountButton);
+        deleteAccountButton = accountEditPopupView.findViewById(R.id.deleteAccountButton);
+
+        accountNameEditText.setText(name);
+        accountBalanceEditText.setText(Float.toString(balance));
+
+        dialogBuilder.setView(accountEditPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        editAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.editAccountModel(accountID, accountNameEditText.getText().toString(), Float.parseFloat(accountBalanceEditText.getText().toString()));
+                dbHelper.editExpenseAfterEditingAccount(name, accountNameEditText.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.deleteCategoryModel(accountID);
+                dialog.dismiss();
+            }
+        });
     }
 
 }
