@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
+import com.example.a777moneymaker.adapters.MyAccountsAdapter;
 
 public class AccountFragment extends Fragment{
 
@@ -30,7 +31,7 @@ public class AccountFragment extends Fragment{
 
     DataBaseHelper dbHelper;
     ListView accountListView;
-    SimpleCursorAdapter simpleCursorAdapter;
+    MyAccountsAdapter simpleCursorAdapter;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -172,6 +173,10 @@ public class AccountFragment extends Fragment{
             public void onClick(View v) {
                 dbHelper.editAccountModel(accountID, accountNameEditText.getText().toString(), Float.parseFloat(accountBalanceEditText.getText().toString()));
                 dbHelper.editExpenseAfterEditingAccount(name, accountNameEditText.getText().toString());
+
+                simpleCursorAdapter = dbHelper.accountListViewFromDB();
+                accountListView.setAdapter(simpleCursorAdapter);
+
                 dialog.dismiss();
             }
         });
@@ -180,6 +185,10 @@ public class AccountFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 dbHelper.deleteCategoryModel(accountID);
+
+                simpleCursorAdapter = dbHelper.accountListViewFromDB();
+                accountListView.setAdapter(simpleCursorAdapter);
+
                 dialog.dismiss();
             }
         });

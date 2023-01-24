@@ -1,7 +1,6 @@
 package com.example.a777moneymaker.fragments;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
+import com.example.a777moneymaker.adapters.MyCategoriesAdapter;
 
 public class CategoryFragment extends Fragment {
 
@@ -27,7 +27,7 @@ public class CategoryFragment extends Fragment {
 
     private DataBaseHelper dbHelper;
     private ListView categoryListView;
-    private SimpleCursorAdapter simpleCursorAdapter;
+    private MyCategoriesAdapter simpleCursorAdapter;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
@@ -78,8 +78,8 @@ public class CategoryFragment extends Fragment {
         categoryListView = myView.findViewById(R.id.categoriesListView);
 
         if(dbHelper.categoryListViewFromDB()==null){
-        Toast.makeText(CategoryFragment.this.getActivity(), "function is null", Toast.LENGTH_LONG).show();
-    }
+            Toast.makeText(CategoryFragment.this.getActivity(), "function is null", Toast.LENGTH_LONG).show();
+        }
 
         simpleCursorAdapter = dbHelper.categoryListViewFromDB();
 
@@ -120,6 +120,10 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dbHelper.editCategoryModel(categoryID, categoryNameEditText.getText().toString());
+
+                simpleCursorAdapter = dbHelper.categoryListViewFromDB();
+                categoryListView.setAdapter(simpleCursorAdapter);
+
                 dialog.dismiss();
             }
         });
@@ -128,6 +132,10 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dbHelper.deleteCategoryModel(categoryID);
+
+                simpleCursorAdapter = dbHelper.categoryListViewFromDB();
+                categoryListView.setAdapter(simpleCursorAdapter);
+
                 dialog.dismiss();
             }
         });

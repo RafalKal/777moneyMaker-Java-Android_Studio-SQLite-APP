@@ -1,10 +1,8 @@
 package com.example.a777moneymaker;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -16,7 +14,6 @@ import com.example.a777moneymaker.activities.AddAccountActivity;
 import com.example.a777moneymaker.activities.AddCategoryActivity;
 import com.example.a777moneymaker.activities.AddExpenseActivity;
 import com.example.a777moneymaker.activities.AddIncomeActivity_v1;
-import com.example.a777moneymaker.fragments.CategoryFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,13 +72,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    public void editCategoryName(View view){
-//        DataBaseHelper dbHelper = new DataBaseHelper(this);
-//        ContentValues cv = new ContentValues();
-//        EditText categoryNameEditText = view.findViewById(R.id.categoryNameEditText);
-//        String categoryName = categoryNameEditText.getText().toString();
-//
-//        dbHelper.editCategoryModel(1, categoryName);
-//
-//    }
 }

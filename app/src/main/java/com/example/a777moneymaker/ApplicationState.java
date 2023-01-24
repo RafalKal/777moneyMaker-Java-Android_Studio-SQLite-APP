@@ -12,5 +12,4 @@ public class ApplicationState {
     public static void setActualAccountModel(AccountModel actualAccountModel) {
         ApplicationState.actualAccountModel = actualAccountModel;
     }
-
 }

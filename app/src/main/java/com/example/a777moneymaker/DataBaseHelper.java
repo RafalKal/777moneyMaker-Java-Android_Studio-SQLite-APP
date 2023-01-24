@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.SimpleCursorAdapter;
 import androidx.annotation.Nullable;
+
+import com.example.a777moneymaker.adapters.MyAccountsAdapter;
+import com.example.a777moneymaker.adapters.MyCategoriesAdapter;
+import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.ExpenseModel;
@@ -122,7 +126,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public boolean editCategoryModel(int id, String categoryName){
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "UPDATE " + CATEGORY_TABLE + " SET " + COLUMN_CATEGORY_NAME + " = \"" + categoryName + "\" WHERE " + COLUMN_CATEGORY_ID + " = " + id;
+        String queryString = "UPDATE " + CATEGORY_TABLE +
+                             " SET " + COLUMN_CATEGORY_NAME + " = \"" + categoryName + "\" " +
+                             "WHERE " + COLUMN_CATEGORY_ID + " = " + id;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -176,14 +182,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public SimpleCursorAdapter categoryListViewFromDB(){
+    public MyCategoriesAdapter categoryListViewFromDB(){
         SQLiteDatabase db = this.getWritableDatabase();
         String columns[] = {COLUMN_CATEGORY_ID, COLUMN_CATEGORY_NAME};
         Cursor cursor = db.query(CATEGORY_TABLE, columns, null, null, null, null, null);
         String[] fromFieldNames = new String[]{COLUMN_CATEGORY_ID, COLUMN_CATEGORY_NAME};
         int[] toVievIDs = new int[]{R.id.categoryID, R.id.categoryName};
         if(context_!=null) {
-            SimpleCursorAdapter accountAdapter = new SimpleCursorAdapter(
+            MyCategoriesAdapter accountAdapter = new MyCategoriesAdapter(
                     context_,
                     R.layout.row_in_category_list,
                     cursor,
@@ -233,8 +239,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public boolean editAccountModel(int id, String accountName, float balance){
         SQLiteDatabase db = this.getWritableDatabase();
 
-//        String queryString = "UPDATE " + USER_ACC_TABLE + " SET " + COLUMN_ACCOUNT_NAME + " = \"" + accountName + "\", SET " + COLUMN_ACCOUNT_BALANCE + " = " + balance + " WHERE " + COLUMN_ACCOUNT_ID + " = " + id;
-
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_ACCOUNT_NAME, accountName);
@@ -243,13 +247,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.update(USER_ACC_TABLE, values, "_id = " + id, null);
         db.close();
 
-//        Cursor cursor = db.rawQuery(queryString, null);
-//
-//        if(cursor.moveToFirst()) {
-//            return true;
-//        }else {
-//            return false;
-//        }
         return false;
     }
 
@@ -298,14 +295,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public SimpleCursorAdapter accountListViewFromDB(){
+    public MyAccountsAdapter accountListViewFromDB(){
         SQLiteDatabase db = this.getWritableDatabase();
         String columns[] = {COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
         Cursor cursor = db.query(USER_ACC_TABLE, columns, null, null, null, null, null);
         String[] fromFieldNames = new String[]{COLUMN_ACCOUNT_ID, COLUMN_ACCOUNT_NAME, COLUMN_MAIN_ACCOUNT, COLUMN_ACCOUNT_BALANCE};
         int[] toVievIDs = new int[]{R.id.accountID, R.id.accountName, R.id.accountIsMain, R.id.accountBalance};
         if(context_!=null) {
-            SimpleCursorAdapter accountAdapter = new SimpleCursorAdapter(
+            MyAccountsAdapter accountAdapter = new MyAccountsAdapter(
                     context_,
                     R.layout.row_in_account_list,
                     cursor,
@@ -344,9 +341,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteExpenseModel(ExpenseModel expenseModel){
+    public boolean deleteExpenseModel(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + EXPENSE_TABLE + " WHERE " + COLUMN_EXPENSE_ID + " = " + expenseModel.getId();
+        String queryString = "DELETE FROM " + EXPENSE_TABLE + " WHERE " + COLUMN_EXPENSE_ID + " = " + id;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -360,8 +357,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public boolean editExpenseAfterEditingAccount(String accountNameOld, String newAccountName){
         SQLiteDatabase db = this.getWritableDatabase();
 
-//        String queryString = "UPDATE " + USER_ACC_TABLE + " SET " + COLUMN_ACCOUNT_NAME + " = \"" + accountName + "\", SET " + COLUMN_ACCOUNT_BALANCE + " = " + balance + " WHERE " + COLUMN_ACCOUNT_ID + " = " + id;
-
         ContentValues values = new ContentValues();
 
         values.put(COLUMN_EXPENSE_ACCOUNT, newAccountName);
@@ -369,13 +364,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.update(EXPENSE_TABLE, values, COLUMN_EXPENSE_ACCOUNT + " = \"" + accountNameOld + "\"", null);
         db.close();
 
-//        Cursor cursor = db.rawQuery(queryString, null);
-//
-//        if(cursor.moveToFirst()) {
-//            return true;
-//        }else {
-//            return false;
-//        }
+        return false;
+    }
+
+    public boolean editExpenseModel(int id, String expenseName, String description, float price, String category, String account, String type, int day, int month, int year){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_EXPENSE_NAME, expenseName);
+        values.put(COLUMN_EXPENSE_DESCRIPTION, description);
+        values.put(COLUMN_EXPENSE_PRICE, price);
+        values.put(COLUMN_EXPENSE_CATEGORY, category);
+        values.put(COLUMN_EXPENSE_ACCOUNT, account);
+        values.put(COLUMN_EXPENSE_TYPE, type);
+        values.put(COLUMN_EXPENSE_DAY, day);
+        values.put(COLUMN_EXPENSE_MONTH, month);
+        values.put(COLUMN_EXPENSE_YEAR, year);
+
+        db.update(EXPENSE_TABLE, values, "_id = " + id, null);
+        db.close();
+
         return false;
     }
 
@@ -409,11 +418,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        //Collections.reverse(returnList);
+
         return returnList;
     }
 
-    public SimpleCursorAdapter transactionListViewFromDB(String account){
+    public MyTransactionAdapter transactionListViewFromDB(String account){
         SQLiteDatabase db = this.getWritableDatabase();
 
         String columns[] = {
@@ -430,8 +439,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             };
 
         String query = "SELECT * FROM EXPENSE_TABLE WHERE " + COLUMN_EXPENSE_ACCOUNT + " = \"" + account + "\" ORDER BY "+ COLUMN_EXPENSE_ID + " DESC";
-
-        //Cursor cursor = db.query(EXPENSE_TABLE, columns, null, null, null, null, COLUMN_EXPENSE_ID + " DESC");
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -462,7 +469,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             };
 
         if(context__!=null) {
-            SimpleCursorAdapter transactionAdapter = new SimpleCursorAdapter(
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
                     context__,
                     R.layout.row_in_transaction_list,
                     cursor,

@@ -38,6 +38,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     int dayA;
     int monthA;
     int yearA;
+    float price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +173,11 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         try {
             dbHelper.addExpenseModel(expenseModel);
+            dbHelper.editAccountModel(
+                    ApplicationState.getActualAccountModel().getId(),
+                    ApplicationState.getActualAccountModel().getName(),
+                    (ApplicationState.getActualAccountModel().getBalance() - price)
+            );
             Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
@@ -194,7 +200,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         // GET TEXTS FROM INPUTS
         String name = nameTextInput.getText().toString();
         String description = descriptionTextInput.getText().toString();
-        float price = Float.parseFloat(priceTextInput.getText().toString());
+        price = Float.parseFloat(priceTextInput.getText().toString());
         String category = categorySpinner.getSelectedItem().toString();
         String date = (String) dateButton.getText();
 
@@ -222,5 +228,4 @@ public class AddExpenseActivity extends AppCompatActivity {
         if(month < 10) return "0" + month;
         else return String.valueOf(month);
     }
-
 }
