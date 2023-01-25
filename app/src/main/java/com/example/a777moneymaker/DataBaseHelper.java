@@ -5,18 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.SimpleCursorAdapter;
 import androidx.annotation.Nullable;
-
 import com.example.a777moneymaker.adapters.MyAccountsAdapter;
 import com.example.a777moneymaker.adapters.MyCategoriesAdapter;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.CategoryModel;
-import com.example.a777moneymaker.models.ExpenseModel;
 import com.example.a777moneymaker.models.IncomeModel;
+import com.example.a777moneymaker.models.TransactionModel;
 import java.util.ArrayList;
 import java.util.List;
+
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     Context context_;
@@ -33,6 +32,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String CATEGORY_TABLE = "CATEGORY_TABLE";
     public static final String COLUMN_CATEGORY_ID = "_id";
     public static final String COLUMN_CATEGORY_NAME = "CATEGORY_NAME";
+
+    // _TRANSACTION_ FINAL VARIABLES
+    public static final String TRANSACTION_TABLE = "TRANSACTION_TABLE";
+    public static final String COLUMN_TRANSACTION_ID = "_id";
+    public static final String COLUMN_TRANSACTION_NAME = "TRANSACTION_NAME";
+    public static final String COLUMN_TRANSACTION_DESCRIPTION = "TRANSACTION_DESCRIPTION";
+    public static final String COLUMN_TRANSACTION_PRICE = "TRANSACTION_PRICE";
+    public static final String COLUMN_TRANSACTION_CATEGORY = "TRANSACTION_CATEGORY";
+    public static final String COLUMN_TRANSACTION_ACCOUNT = "TRANSACTION_ACCOUNT";
+    public static final String COLUMN_TRANSACTION_TYPE = "TRANSACTION_TYPE";
+    public static final String COLUMN_TRANSACTION_DAY = "TRANSACTION_DAY";
+    public static final String COLUMN_TRANSACTION_MONTH = "TRANSACTION_MONTH";
+    public static final String COLUMN_TRANSACTION_YEAR = "TRANSACTION_YEAR";
 
     // _EXPENSE_ FINAL VARIABLES
     public static final String EXPENSE_TABLE = "EXPENSE_TABLE";
@@ -60,7 +72,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_INCOME_YEAR = "INCOME_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "productionProcessDB9.db", null, 1);
+        super(context, "productionProcessDB10.db", null, 1);
         context_ = context;
         context__ = context;
     }
@@ -74,14 +86,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // STATEMENT FOR CREATING CATEGORY TABLE IN DATABASE
         String createCategoryTableStatement = "CREATE TABLE " + CATEGORY_TABLE + " (" + COLUMN_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_CATEGORY_NAME + " TEXT)";
 
-        // STATEMENT FOR CREATING EXPENSE TABLE IN DATABASE
-        String createExpenseTableStatement = "CREATE TABLE " + EXPENSE_TABLE + " (" + COLUMN_EXPENSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_EXPENSE_NAME + " TEXT, " + COLUMN_EXPENSE_DESCRIPTION + " TEXT, " + COLUMN_EXPENSE_PRICE + " REAL, " + COLUMN_EXPENSE_CATEGORY + " TEXT, " + COLUMN_EXPENSE_ACCOUNT + " TEXT, " + COLUMN_EXPENSE_TYPE + " TEXT, " + COLUMN_EXPENSE_DAY + " INTEGER, " + COLUMN_EXPENSE_MONTH + " INTEGER, "+ COLUMN_EXPENSE_YEAR + " INTEGER)";
+        // STATEMENT FOR CREATING TRANSACTION TABLE IN DATABASE
+        String createTransactionTableStatement = "CREATE TABLE " + TRANSACTION_TABLE + " (" + COLUMN_TRANSACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TRANSACTION_NAME + " TEXT, " + COLUMN_TRANSACTION_DESCRIPTION + " TEXT, " + COLUMN_TRANSACTION_PRICE + " REAL, " + COLUMN_TRANSACTION_CATEGORY + " TEXT, " + COLUMN_TRANSACTION_ACCOUNT + " TEXT, " + COLUMN_TRANSACTION_TYPE + " TEXT, " + COLUMN_TRANSACTION_DAY + " INTEGER, " + COLUMN_TRANSACTION_MONTH + " INTEGER, "+ COLUMN_TRANSACTION_YEAR + " INTEGER)";
 
         // STATEMENT FOR CREATING INCOME TABLE IN DATABASE
         String createIncomeTableStatement = "CREATE TABLE " + INCOME_TABLE + " (" + COLUMN_INCOME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_INCOME_NAME + " TEXT, " + COLUMN_INCOME_DESCRIPTION + " TEXT, " + COLUMN_INCOME_PRICE + " REAL, " + COLUMN_INCOME_CATEGORY + " TEXT, " + COLUMN_INCOME_ACCOUNT + ", TEXT" + COLUMN_INCOME_DAY + " INTEGER, " + COLUMN_INCOME_MONTH + " INTEGER, "+ COLUMN_INCOME_YEAR + " INTEGER)";
 
         //  EXECUTION OF THE ABOVE
-        db.execSQL(createExpenseTableStatement);
+        db.execSQL(createTransactionTableStatement);
         db.execSQL(createIncomeTableStatement);
         db.execSQL(createAccountTableStatement);
         db.execSQL(createCategoryTableStatement);
@@ -91,9 +103,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    // ---------------------\
-    // _CATEGORY_ FUNCTIONS  |
-    // ---------------------/
+
+    // -----------------------------------------------------------------------------------\
+    // _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS           |
+    // -----------------------------------------------------------------------------------/
     public boolean addCategoryModel(CategoryModel categoryModel){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -201,9 +214,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    // ---------------------\
-    // _ACCOUNT_ FUNCTIONS  |
-    // ---------------------/
+    // -----------------------------------------------------------------------------------\
+    // _ACCOUNT_ FUNCTIONS  |   _ACCOUNT_ FUNCTIONS  |   _ACCOUNT_ FUNCTIONS              |
+    // -----------------------------------------------------------------------------------/
+
     public boolean addAccountModel(AccountModel accountModel){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -288,7 +302,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public AccountModel getAccountModelByName(String name){
         for (int i = 0; i < getEveryAccount().size(); i++){
-            if(getEveryAccount().get(i).getName() == name){
+            if(getEveryAccount().get(i).getName().equals(name)){
                 return getEveryAccount().get(i);
             }
         }
@@ -313,25 +327,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else return null;
     }
 
-    // ---------------------\
-    // _EXPENSE_ FUNCTIONS  |
-    // ---------------------/
-    public boolean addExpenseModel(ExpenseModel expenseModel){
+
+    // -----------------------------------------------------------------------------------\
+    // _TRANSACTION_ FUNCTIONS  |   _TRANSACTION_ FUNCTIONS  |   _TRANSACTION_ FUNCTIONS  |
+    // -----------------------------------------------------------------------------------/
+
+    public boolean addTransactionModel(TransactionModel transactionModel){
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_EXPENSE_NAME, expenseModel.getName());
-        cv.put(COLUMN_EXPENSE_DESCRIPTION, expenseModel.getDescription());
-        cv.put(COLUMN_EXPENSE_PRICE, expenseModel.getPrice());
-        cv.put(COLUMN_EXPENSE_CATEGORY, expenseModel.getCategory());
-        cv.put(COLUMN_EXPENSE_ACCOUNT, expenseModel.getAccount());
-        cv.put(COLUMN_EXPENSE_TYPE, expenseModel.getType());
-        cv.put(COLUMN_EXPENSE_DAY, expenseModel.getDay());
-        cv.put(COLUMN_EXPENSE_MONTH, expenseModel.getMonth());
-        cv.put(COLUMN_EXPENSE_YEAR, expenseModel.getYear());
+        cv.put(COLUMN_TRANSACTION_NAME, transactionModel.getName());
+        cv.put(COLUMN_TRANSACTION_DESCRIPTION, transactionModel.getDescription());
+        cv.put(COLUMN_TRANSACTION_PRICE, transactionModel.getPrice());
+        cv.put(COLUMN_TRANSACTION_CATEGORY, transactionModel.getCategory());
+        cv.put(COLUMN_TRANSACTION_ACCOUNT, transactionModel.getAccount());
+        cv.put(COLUMN_TRANSACTION_TYPE, transactionModel.getType());
+        cv.put(COLUMN_TRANSACTION_DAY, transactionModel.getDay());
+        cv.put(COLUMN_TRANSACTION_MONTH, transactionModel.getMonth());
+        cv.put(COLUMN_TRANSACTION_YEAR, transactionModel.getYear());
 
-        long insert = db.insert(EXPENSE_TABLE, null, cv);
+        long insert = db.insert(TRANSACTION_TABLE, null, cv);
 
         if (insert == -1){
             return false;
@@ -341,9 +357,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean deleteExpenseModel(int id){
+    public boolean deleteTransactionModel(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + EXPENSE_TABLE + " WHERE " + COLUMN_EXPENSE_ID + " = " + id;
+        String queryString = "DELETE FROM " + TRANSACTION_TABLE + " WHERE " + COLUMN_TRANSACTION_ID + " = " + id;
 
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -354,44 +370,62 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean editExpenseAfterEditingAccount(String accountNameOld, String newAccountName){
+    public boolean editTransactionAfterEditingAccount(String accountNameOld, String newAccountName){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_EXPENSE_ACCOUNT, newAccountName);
+        values.put(COLUMN_TRANSACTION_ACCOUNT, newAccountName);
 
-        db.update(EXPENSE_TABLE, values, COLUMN_EXPENSE_ACCOUNT + " = \"" + accountNameOld + "\"", null);
+        db.update(TRANSACTION_TABLE, values, COLUMN_TRANSACTION_ACCOUNT + " = \"" + accountNameOld + "\"", null);
         db.close();
 
         return false;
     }
 
-    public boolean editExpenseModel(int id, String expenseName, String description, float price, String category, String account, String type, int day, int month, int year){
+    public boolean editTransactionModel(int id, String expenseName, String description, float price, String category, String account, String type, int day, int month, int year){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_EXPENSE_NAME, expenseName);
-        values.put(COLUMN_EXPENSE_DESCRIPTION, description);
-        values.put(COLUMN_EXPENSE_PRICE, price);
-        values.put(COLUMN_EXPENSE_CATEGORY, category);
-        values.put(COLUMN_EXPENSE_ACCOUNT, account);
-        values.put(COLUMN_EXPENSE_TYPE, type);
-        values.put(COLUMN_EXPENSE_DAY, day);
-        values.put(COLUMN_EXPENSE_MONTH, month);
-        values.put(COLUMN_EXPENSE_YEAR, year);
+        values.put(COLUMN_TRANSACTION_NAME, expenseName);
+        values.put(COLUMN_TRANSACTION_DESCRIPTION, description);
+        values.put(COLUMN_TRANSACTION_PRICE, price);
+        values.put(COLUMN_TRANSACTION_CATEGORY, category);
+        values.put(COLUMN_TRANSACTION_ACCOUNT, account);
+        values.put(COLUMN_TRANSACTION_TYPE, type);
+        values.put(COLUMN_TRANSACTION_DAY, day);
+        values.put(COLUMN_TRANSACTION_MONTH, month);
+        values.put(COLUMN_TRANSACTION_YEAR, year);
 
-        db.update(EXPENSE_TABLE, values, "_id = " + id, null);
+        db.update(TRANSACTION_TABLE, values, "_id = " + id, null);
         db.close();
 
         return false;
     }
 
-    public List<ExpenseModel> getEveryExpense() {
-        List<ExpenseModel> returnList = new ArrayList<>();
+    public TransactionModel getTransactionModelByID(int id){
+        for (int i = 0; i < getEveryTransaction().size(); i++){
+            if(getEveryTransaction().get(i).getId() == id){
+                return getEveryTransaction().get(i);
+            }
+        }
+        return null;
+    }
 
-        String queryString = "SELECT * FROM " + EXPENSE_TABLE;
+    public TransactionModel getTransactionModelByName(String name){
+        for (int i = 0; i < getEveryTransaction().size(); i++){
+            if(getEveryTransaction().get(i).getName() == name){
+                return getEveryTransaction().get(i);
+            }
+        }
+        return null;
+    }
+
+    public List<TransactionModel> getEveryTransaction() {
+        List<TransactionModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + TRANSACTION_TABLE;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -399,7 +433,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()) {
             do {
-                int expenseID = cursor.getInt(0);
+                int transactionID = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String description = cursor.getString(2);
                 float price = cursor.getFloat(3);
@@ -410,8 +444,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 int month = cursor.getInt(8);
                 int year = cursor.getInt(9);
 
-                ExpenseModel newExpense = new ExpenseModel(expenseID, name, description, price, category, account, type, day, month, year);
-                returnList.add(newExpense);
+                TransactionModel newTransaction = new TransactionModel(transactionID, name, description, price, category, account, type, day, month, year);
+                returnList.add(newTransaction);
             }while (cursor.moveToNext());
         }else {
             // EMPTY SECTION
@@ -426,33 +460,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String columns[] = {
-                            COLUMN_EXPENSE_ID,
-                            COLUMN_EXPENSE_NAME,
-                            COLUMN_EXPENSE_DESCRIPTION,
-                            COLUMN_EXPENSE_PRICE,
-                            COLUMN_EXPENSE_CATEGORY,
-                            COLUMN_EXPENSE_ACCOUNT,
-                            COLUMN_EXPENSE_TYPE,
-                            COLUMN_EXPENSE_DAY,
-                            COLUMN_EXPENSE_MONTH,
-                            COLUMN_EXPENSE_YEAR
+                            COLUMN_TRANSACTION_ID,
+                            COLUMN_TRANSACTION_NAME,
+                            COLUMN_TRANSACTION_DESCRIPTION,
+                            COLUMN_TRANSACTION_PRICE,
+                            COLUMN_TRANSACTION_CATEGORY,
+                            COLUMN_TRANSACTION_ACCOUNT,
+                            COLUMN_TRANSACTION_TYPE,
+                            COLUMN_TRANSACTION_DAY,
+                            COLUMN_TRANSACTION_MONTH,
+                            COLUMN_TRANSACTION_YEAR
                             };
 
-        String query = "SELECT * FROM EXPENSE_TABLE WHERE " + COLUMN_EXPENSE_ACCOUNT + " = \"" + account + "\" ORDER BY "+ COLUMN_EXPENSE_ID + " DESC";
+        String query = "SELECT * FROM " + TRANSACTION_TABLE + " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" ORDER BY "+ COLUMN_TRANSACTION_ID + " DESC";
 
         Cursor cursor = db.rawQuery(query, null);
 
         String[] fromFieldNames = new String[]{
-                                                COLUMN_EXPENSE_ID,
-                                                COLUMN_EXPENSE_NAME,
-                                                COLUMN_EXPENSE_DESCRIPTION,
-                                                COLUMN_EXPENSE_PRICE,
-                                                COLUMN_EXPENSE_CATEGORY,
-                                                COLUMN_EXPENSE_ACCOUNT,
-                                                COLUMN_EXPENSE_TYPE,
-                                                COLUMN_EXPENSE_DAY,
-                                                COLUMN_EXPENSE_MONTH,
-                                                COLUMN_EXPENSE_YEAR
+                                                COLUMN_TRANSACTION_ID,
+                                                COLUMN_TRANSACTION_NAME,
+                                                COLUMN_TRANSACTION_DESCRIPTION,
+                                                COLUMN_TRANSACTION_PRICE,
+                                                COLUMN_TRANSACTION_CATEGORY,
+                                                COLUMN_TRANSACTION_ACCOUNT,
+                                                COLUMN_TRANSACTION_TYPE,
+                                                COLUMN_TRANSACTION_DAY,
+                                                COLUMN_TRANSACTION_MONTH,
+                                                COLUMN_TRANSACTION_YEAR
                                                 };
 
         int[] toVievIDs = new int[]{
@@ -480,75 +514,4 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else return null;
     }
 
-    // ---------------------\
-    // _INCOME_ FUNCTIONS  |
-    // ---------------------/
-    public boolean addIncomeModel(IncomeModel incomeModel){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-
-        cv.put(COLUMN_INCOME_NAME, incomeModel.getName());
-        cv.put(COLUMN_INCOME_DESCRIPTION, incomeModel.getDescription());
-        cv.put(COLUMN_INCOME_PRICE, incomeModel.getPrice());
-        cv.put(COLUMN_INCOME_CATEGORY, incomeModel.getCategory());
-        cv.put(COLUMN_INCOME_ACCOUNT, incomeModel.getAccount());
-        cv.put(COLUMN_INCOME_DAY, incomeModel.getDay());
-        cv.put(COLUMN_INCOME_MONTH, incomeModel.getMonth());
-        cv.put(COLUMN_INCOME_YEAR, incomeModel.getYear());
-
-        long insert = db.insert(INCOME_TABLE, null, cv);
-
-        if (insert == -1){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    public boolean deleteIncomeModel(IncomeModel incomeModel){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String queryString = "DELETE FROM " + INCOME_TABLE + " WHERE " + COLUMN_INCOME_ID + " = " + incomeModel.getId();
-
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        if(cursor.moveToFirst()) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    public List<IncomeModel> getEveryIncome() {
-        List<IncomeModel> returnList = new ArrayList<>();
-
-        String queryString = "SELECT * FROM " + INCOME_TABLE;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(queryString, null);
-
-        if(cursor.moveToFirst()) {
-            do {
-                 int incomeID = cursor.getInt(0);
-                String name = cursor.getString(1);
-                String description = cursor.getString(2);
-                float price = cursor.getFloat(3);
-                String category = cursor.getString(4);
-                String account = cursor.getString(5);
-                int day = cursor.getInt(6);
-                int month = cursor.getInt(7);
-                int year = cursor.getInt(8);
-
-                IncomeModel newIncome = new IncomeModel(incomeID, name, description, price, category, account, day, month, year);
-                returnList.add(newIncome);
-            }while (cursor.moveToNext());
-        }else {
-            // EMPTY SECTION
-        }
-        cursor.close();
-        db.close();
-        return returnList;
-    }
 }

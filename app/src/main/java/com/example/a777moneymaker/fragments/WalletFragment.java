@@ -18,13 +18,14 @@ import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.R;
+import com.example.a777moneymaker.models.AccountModel;
+import com.example.a777moneymaker.models.TransactionModel;
 
 public class WalletFragment extends Fragment {
 
     ConstraintLayout constraintLayout;
     DataBaseHelper dbHelper;
     ListView transactionListView;
-    //SimpleCursorAdapter simpleCursorAdapter;
     MyTransactionAdapter simpleCursorAdapter;
     TextView accountNameText;
     TextView balanceText;
@@ -107,6 +108,10 @@ public class WalletFragment extends Fragment {
             accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());
             balanceText.setText(ApplicationState.getActualAccountModel().getBalance() + " zl");
             accountName = ApplicationState.getActualAccountModel().getName();
+        }else {
+            accountNameText.setText("Stworz konto");
+            balanceText.setText(" ");
+            accountName = "account doesnt exist";
         }
 
         // DB HELPER FOR ADD ACCOUNT TO DATABASE
@@ -198,7 +203,7 @@ public class WalletFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.editExpenseModel(transactionID,
+                dbHelper.editTransactionModel(transactionID,
                         nameEditText.getText().toString(),
                         descriptionEditText.getText().toString(),
                         Float.parseFloat(priceEditText.getText().toString()),
@@ -226,7 +231,19 @@ public class WalletFragment extends Fragment {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.deleteExpenseModel(transactionID);
+               TransactionModel transaction = dbHelper.getTransactionModelByID(transactionID);
+               AccountModel account = dbHelper.getAccountModelByName(transaction.getAccount());
+
+               if(transaction.getType().equals("WYDATEK")){
+                   dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() + transaction.getPrice());
+               }else {
+                   dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() - transaction.getPrice());
+               }
+
+
+
+                dbHelper.deleteTransactionModel(transactionID);
+
 
                 if(ApplicationState.getActualAccountModel() != null){
                     accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());

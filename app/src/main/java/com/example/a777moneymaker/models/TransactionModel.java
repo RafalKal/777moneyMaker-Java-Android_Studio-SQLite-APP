@@ -1,6 +1,6 @@
 package com.example.a777moneymaker.models;
 
-public class ExpenseModel {
+public class TransactionModel {
     private int id;
     private String name;
     private String description;
@@ -12,7 +12,7 @@ public class ExpenseModel {
     private int month;
     private int year;
 
-    public ExpenseModel(int id, String name, String description, float price, String category, String account, String type, int day, int month, int year) {
+    public TransactionModel(int id, String name, String description, float price, String category, String account, String type, int day, int month, int year) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,7 +25,7 @@ public class ExpenseModel {
         this.year = year;
     }
 
-    public ExpenseModel(String name, String description, float price, String category, String account, String type, int day, int month, int year) {
+    public TransactionModel(String name, String description, float price, String category, String account, String type, int day, int month, int year) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -139,7 +139,7 @@ public class ExpenseModel {
         this.account = account;
     }
 
-    public ExpenseModel(){
+    public TransactionModel(){
         // EMPTY CONSTRUCTOR
     }
 }

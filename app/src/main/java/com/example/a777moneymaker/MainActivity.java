@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showTransactions(View view){
         DataBaseHelper dbHelper = new DataBaseHelper(this);
-        Toast.makeText(this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public void addExpense(View view){
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void show(View view){
-        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
-        startActivity(intent);
-    }
+//    public void show(View view){
+//        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
+//        startActivity(intent);
+//    }
 
     public void goToAddAccount(View view){
         Intent intent = new Intent(getApplicationContext(), AddAccountActivity.class);

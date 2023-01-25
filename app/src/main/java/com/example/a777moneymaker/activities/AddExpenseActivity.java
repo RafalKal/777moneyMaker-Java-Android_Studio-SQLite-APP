@@ -17,7 +17,7 @@ import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.models.CategoryModel;
-import com.example.a777moneymaker.models.ExpenseModel;
+import com.example.a777moneymaker.models.TransactionModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -30,7 +30,7 @@ public class AddExpenseActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     EditText descriptionTextInput;
     Button dateButton;
-    ExpenseModel expenseModel;
+    TransactionModel transactionModel;
     DataBaseHelper dbHelper;
     ListView itemsListView;
     ArrayAdapter<String> adapter;
@@ -172,13 +172,13 @@ public class AddExpenseActivity extends AppCompatActivity {
         dbHelper = new DataBaseHelper(AddExpenseActivity.this);
 
         try {
-            dbHelper.addExpenseModel(expenseModel);
+            dbHelper.addTransactionModel(transactionModel);
             dbHelper.editAccountModel(
                     ApplicationState.getActualAccountModel().getId(),
                     ApplicationState.getActualAccountModel().getName(),
                     (ApplicationState.getActualAccountModel().getBalance() - price)
             );
-            Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryExpense().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();
@@ -205,9 +205,9 @@ public class AddExpenseActivity extends AppCompatActivity {
         String date = (String) dateButton.getText();
 
         if(ApplicationState.getActualAccountModel() != null) {
-            expenseModel = new ExpenseModel(name, description, price, category, ApplicationState.getActualAccountModel().getName(), "WYDATEK", dayA, monthA, yearA);
+            transactionModel = new TransactionModel(name, description, price, category, ApplicationState.getActualAccountModel().getName(), "WYDATEK", dayA, monthA, yearA);
             // ADDING NEW STRING TO ARRAYLIST
-            itemsList.add(expenseModel.toString());
+            itemsList.add(transactionModel.toString());
 
             // ADAPTER FOR FILLING THE DATA LISTVIEW
             adapter = new ArrayAdapter<String>(this, R.layout.row_in_pre_expense_list, itemsList);

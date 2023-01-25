@@ -13,21 +13,24 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
-import com.example.a777moneymaker.models.IncomeModel;
+import com.example.a777moneymaker.models.CategoryModel;
+import com.example.a777moneymaker.models.TransactionModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddIncomeActivity extends AppCompatActivity {
 
-    EditText nameTextView;
-    EditText priceTextView;
+    EditText nameTextInput;
+    EditText priceTextInput;
     Button addToShoppingListButton;
     Spinner categorySpinner;
     DatePickerDialog datePickerDialog;
+    EditText descriptionTextInput;
     Button dateButton;
-    IncomeModel incomeModel;
+    TransactionModel transactionModel;
     DataBaseHelper dbHelper;
     ListView itemsListView;
     ArrayAdapter<String> adapter;
@@ -35,6 +38,7 @@ public class AddIncomeActivity extends AppCompatActivity {
     int dayA;
     int monthA;
     int yearA;
+    float price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,15 @@ public class AddIncomeActivity extends AppCompatActivity {
 
         // CATEGORY SPINNER
         Spinner dropdown = findViewById(R.id.categorySpinner);
-        String[] categories = {"Jedzenie", "Napoje", "Paliwo", "Komunikacja", "Alkohol", "Papierosy", "Rozrywka", "Edukacja"};
+
+        CategoryModel[] categoriesObjects = dbHelper.getEveryCategory().toArray(new CategoryModel[0]);
+        String[] categories = new String[categoriesObjects.length];
+        for(int i = 0; i < categories.length; i++) {
+            categories[i] = categoriesObjects[i].getName();
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, categories);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
 
@@ -80,7 +91,7 @@ public class AddIncomeActivity extends AppCompatActivity {
     }
 
     //--------------------------------------------------------------------------------------\
-    // FUNCTIONS FOR DATA PICKER                                                            |
+    // FUNCTIONS FOR DATE PICKER                                                            |
     //--------------------------------------------------------------------------------------/
     private String getMonthFormat(int month){
         if(month==1)
@@ -114,8 +125,11 @@ public class AddIncomeActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        month = month + 1;
+        month++;
         int day = cal.get(Calendar.DAY_OF_MONTH);
+        dayA = day;
+        monthA = month;
+        yearA = year;
 
         return makeDateString(day, month, year);
     }
@@ -124,7 +138,7 @@ public class AddIncomeActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month + 1;
+                month++;
 
                 String date = makeDateString(day, month, year);
                 dateButton.setText(date);
@@ -153,53 +167,65 @@ public class AddIncomeActivity extends AppCompatActivity {
     //--------------------------------------------------------------------------------------|
 
 
-    public void submitAddIncome(View view) {
+    public void submitAddExpense(View view) {
 
         dbHelper = new DataBaseHelper(AddIncomeActivity.this);
 
-        //expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
-
         try {
-            dbHelper.addIncomeModel(incomeModel);
-            Toast.makeText(AddIncomeActivity.this, dbHelper.getEveryIncome().toString(), Toast.LENGTH_LONG).show();
+            dbHelper.addTransactionModel(transactionModel);
+            dbHelper.editAccountModel(
+                    ApplicationState.getActualAccountModel().getId(),
+                    ApplicationState.getActualAccountModel().getName(),
+                    (ApplicationState.getActualAccountModel().getBalance() + price)
+            );
+            Toast.makeText(AddIncomeActivity.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
-            Toast.makeText(AddIncomeActivity.this, "Nie udalo sie dodac wpływu do db", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity.this, "Nie udalo sie dodac wpływu do bazy danych", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-        //finish();
+        finish();
     }
 
     // '+' BUTTON
-    public void addToIncomeList(View view){
+    public void addToShoppingList(View view){
 
         // LINKING TO COMPONENTS FROM XML LAYOUT USING ID
-        nameTextView = findViewById(R.id.incomeName);
-        priceTextView = findViewById(R.id.incomePrice);
+        nameTextInput = findViewById(R.id.expenseName);
+        priceTextInput = findViewById(R.id.expensePrice);
         categorySpinner = findViewById(R.id.categorySpinner);
+        descriptionTextInput = findViewById(R.id.descriptionTextInput);
         dateButton.getText();
 
         // GET TEXTS FROM INPUTS
-        String name = nameTextView.getText().toString();
-        String description = "*opis*";
-        float price = Float.parseFloat(priceTextView.getText().toString());
+        String name = nameTextInput.getText().toString();
+        String description = descriptionTextInput.getText().toString();
+        price = Float.parseFloat(priceTextInput.getText().toString());
         String category = categorySpinner.getSelectedItem().toString();
         String date = (String) dateButton.getText();
 
-        // NEW EXPENSE OBJECT
-        //expenseModel = new ExpenseModel("Snickers", "Snickers Piotr i Pawel", 2.99F, "Jedzenie", ApplicationState.getActualAccount(), dayA, monthA, yearA);
+        if(ApplicationState.getActualAccountModel() != null) {
+            transactionModel = new TransactionModel(name, description, price, category, ApplicationState.getActualAccountModel().getName(), "WPŁYW", dayA, monthA, yearA);
+            // ADDING NEW STRING TO ARRAYLIST
+            itemsList.add(transactionModel.toString());
 
-        // ADDING NEW STRING TO ARRAYLIST
-        itemsList.add(incomeModel.toString());
+            // ADAPTER FOR FILLING THE DATA LISTVIEW
+            adapter = new ArrayAdapter<String>(this, R.layout.row_in_pre_expense_list, itemsList);
 
-        // ADAPTER FOR FILLING THE DATA LISTVIEW
-        adapter = new ArrayAdapter<String>(this, R.layout.row_in_pre_income_list, itemsList);
+            // FILLING THE LISTVIEW WITH DATA
+            itemsListView.setAdapter(adapter);
 
-        // FILLING THE LISTVIEW WITH DATA
-        itemsListView.setAdapter(adapter);
+            // SET INPUTS TO DEFAULT INITIAL VALUES
+            nameTextInput.setText(null);
+            priceTextInput.setText(null);
+            descriptionTextInput.setText(null);
+        }else {
+            Toast.makeText(AddIncomeActivity.this, "Nie ma konta, do którego można przypisać Wpływu", Toast.LENGTH_LONG).show();
+        }
+    }
 
-        // SET INPUTS TO DEFAULT INITIAL VALUES
-        nameTextView.setText(null);
-        priceTextView.setText(null);
+    public String monthFormatter(int month){
+        if(month < 10) return "0" + month;
+        else return String.valueOf(month);
     }
 }

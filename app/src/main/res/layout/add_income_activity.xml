@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:onClick="addToIncomeList"
+            android:onClick="addToShoppingList"
             android:layout_margin="10dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton">
         </Button>
@@ -82,7 +82,7 @@
         android:layout_below="@+id/categorySpinner"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:text="ZAZNACZ DATĘ:"
+        android:text="Wybierz datę:"
         android:textSize="20sp" />
 
     <Button
@@ -96,11 +96,21 @@
         style="?android:spinnerStyle"
         android:onClick="openDatePicker" />
 
+    <EditText
+        android:id="@+id/descriptionTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/datePickerButton"
+        android:gravity="center"
+        android:hint="opis produktu / sklepu / sytuacji:">
+    </EditText>
+
     <ListView
         android:id="@+id/itemsListView"
         android:layout_width="match_parent"
-        android:layout_height="330dp"
-        android:layout_below="@id/datePickerButton"/>
+        android:layout_height="277dp"
+        android:layout_below="@id/descriptionTextInput"
+        android:layout_marginTop="10dp" />
 
     <Button
         android:id="@+id/addIncomeButton"
@@ -109,7 +119,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:onClick="submitAddIncome"
-        android:text="DODAJ WPŁYW" />
+        android:onClick="submitAddExpense"
+        android:text="Dodaj wydatek" />
 
 </RelativeLayout>
