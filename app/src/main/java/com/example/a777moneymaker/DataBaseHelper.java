@@ -607,4 +607,200 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }else return null;
     }
 
+    public MyTransactionAdapter specialListViewFromDB(String account, String phrase){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM " + TRANSACTION_TABLE +
+                " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" " +
+                "AND (" + COLUMN_TRANSACTION_TYPE + " = \"" + phrase + "\" " +
+                    "OR " + COLUMN_TRANSACTION_NAME + " = \"" + phrase + "\" " +
+                    "OR " + COLUMN_TRANSACTION_DESCRIPTION + " = \"" + phrase + "\" " +
+                    "OR " + COLUMN_TRANSACTION_TYPE + " = \"" + phrase + "\" " +
+                    "OR " + COLUMN_TRANSACTION_CATEGORY + " = \"" + phrase + "\") " +
+                "ORDER BY " + COLUMN_TRANSACTION_ID + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
+
+        if(context__!=null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
+    public MyTransactionAdapter specialListViewFromDB1(String account, String phrase){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM " + TRANSACTION_TABLE +
+                " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" " +
+                "AND ( " + COLUMN_TRANSACTION_TYPE + " LIKE '" + phrase + "' " +
+                "OR " + COLUMN_TRANSACTION_NAME + " LIKE '" + phrase + "' " +
+                "OR " + COLUMN_TRANSACTION_DESCRIPTION + " LIKE '" + phrase + "' " +
+                "OR " + COLUMN_TRANSACTION_TYPE + " LIKE '" + phrase + "' " +
+                "OR " + COLUMN_TRANSACTION_CATEGORY + " LIKE '" + phrase + "' ) " +
+                "ORDER BY " + COLUMN_TRANSACTION_ID + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
+
+        if(context__!=null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
+    public MyTransactionAdapter specialListViewFromDB2(String account, String phrase){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM TRANSACTION_TABLE " +
+                       "WHERE  TRANSACTION_ACCOUNT = \"" + account + "\" AND " +
+                              "(TRANSACTION_CATEGORY    LIKE '%" + phrase + "%' OR " +
+                              "TRANSACTION_ACCOUNT      LIKE '%" + phrase + "%' OR " +
+                              //"TRANSACTION_PRICE         =     " + Float.parseFloat(phrase) + " OR " +
+                              "TRANSACTION_TYPE         LIKE '%" + phrase + "%' OR " +
+                              "TRANSACTION_DESCRIPTION  LIKE '%" + phrase + "%' OR " +
+                              "TRANSACTION_NAME         LIKE '%" + phrase + "%')";
+
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
+
+        if(context__!=null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
 }
