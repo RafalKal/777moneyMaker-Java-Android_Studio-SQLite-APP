@@ -3,8 +3,11 @@ package com.example.a777moneymaker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -14,6 +17,8 @@ import com.example.a777moneymaker.activities.AddAccountActivity;
 import com.example.a777moneymaker.activities.AddCategoryActivity;
 import com.example.a777moneymaker.activities.AddExpenseActivity;
 import com.example.a777moneymaker.activities.AddIncomeActivity_v1;
+import com.example.a777moneymaker.adapters.MyTransactionAdapter;
+import com.example.a777moneymaker.fragments.WalletFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

@@ -5,13 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.SimpleCursorAdapter;
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.adapters.MyAccountsAdapter;
 import com.example.a777moneymaker.adapters.MyCategoriesAdapter;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.CategoryModel;
-import com.example.a777moneymaker.models.IncomeModel;
 import com.example.a777moneymaker.models.TransactionModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,30 +46,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TRANSACTION_MONTH = "TRANSACTION_MONTH";
     public static final String COLUMN_TRANSACTION_YEAR = "TRANSACTION_YEAR";
 
-    // _EXPENSE_ FINAL VARIABLES
-    public static final String EXPENSE_TABLE = "EXPENSE_TABLE";
-    public static final String COLUMN_EXPENSE_ID = "_id";
-    public static final String COLUMN_EXPENSE_NAME = "EXPENSE_NAME";
-    public static final String COLUMN_EXPENSE_DESCRIPTION = "EXPENSE_DESCRIPTION";
-    public static final String COLUMN_EXPENSE_PRICE = "EXPENSE_PRICE";
-    public static final String COLUMN_EXPENSE_CATEGORY = "EXPENSE_CATEGORY";
-    public static final String COLUMN_EXPENSE_ACCOUNT = "EXPENSE_ACCOUNT";
-    public static final String COLUMN_EXPENSE_TYPE = "EXPENSE_TYPE";
-    public static final String COLUMN_EXPENSE_DAY = "EXPENSE_DAY";
-    public static final String COLUMN_EXPENSE_MONTH = "EXPENSE_MONTH";
-    public static final String COLUMN_EXPENSE_YEAR = "EXPENSE_YEAR";
-
-    // _INCOME_ FINAL VARIABLES
-    public static final String INCOME_TABLE = "INCOME_TABLE";
-    public static final String COLUMN_INCOME_ID = "ID_INCOME";
-    public static final String COLUMN_INCOME_NAME = "INCOME_NAME";
-    public static final String COLUMN_INCOME_DESCRIPTION = "INCOME_DESCRIPTION";
-    public static final String COLUMN_INCOME_PRICE = "INCOME_PRICE";
-    public static final String COLUMN_INCOME_CATEGORY = "INCOME_CATEGORY";
-    public static final String COLUMN_INCOME_ACCOUNT = "INCOME_ACCOUNT";
-    public static final String COLUMN_INCOME_DAY = "INCOME_DAY";
-    public static final String COLUMN_INCOME_MONTH = "INCOME_MONTH";
-    public static final String COLUMN_INCOME_YEAR = "INCOME_YEAR";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, "productionProcessDB10.db", null, 1);
@@ -89,12 +65,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // STATEMENT FOR CREATING TRANSACTION TABLE IN DATABASE
         String createTransactionTableStatement = "CREATE TABLE " + TRANSACTION_TABLE + " (" + COLUMN_TRANSACTION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TRANSACTION_NAME + " TEXT, " + COLUMN_TRANSACTION_DESCRIPTION + " TEXT, " + COLUMN_TRANSACTION_PRICE + " REAL, " + COLUMN_TRANSACTION_CATEGORY + " TEXT, " + COLUMN_TRANSACTION_ACCOUNT + " TEXT, " + COLUMN_TRANSACTION_TYPE + " TEXT, " + COLUMN_TRANSACTION_DAY + " INTEGER, " + COLUMN_TRANSACTION_MONTH + " INTEGER, "+ COLUMN_TRANSACTION_YEAR + " INTEGER)";
 
-        // STATEMENT FOR CREATING INCOME TABLE IN DATABASE
-        String createIncomeTableStatement = "CREATE TABLE " + INCOME_TABLE + " (" + COLUMN_INCOME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_INCOME_NAME + " TEXT, " + COLUMN_INCOME_DESCRIPTION + " TEXT, " + COLUMN_INCOME_PRICE + " REAL, " + COLUMN_INCOME_CATEGORY + " TEXT, " + COLUMN_INCOME_ACCOUNT + ", TEXT" + COLUMN_INCOME_DAY + " INTEGER, " + COLUMN_INCOME_MONTH + " INTEGER, "+ COLUMN_INCOME_YEAR + " INTEGER)";
 
         //  EXECUTION OF THE ABOVE
         db.execSQL(createTransactionTableStatement);
-        db.execSQL(createIncomeTableStatement);
         db.execSQL(createAccountTableStatement);
         db.execSQL(createCategoryTableStatement);
     }
@@ -103,10 +76,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-
     // -----------------------------------------------------------------------------------\
     // _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS           |
     // -----------------------------------------------------------------------------------/
+
     public boolean addCategoryModel(CategoryModel categoryModel){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -501,6 +474,126 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             R.id.transactionDateMonth,
                             R.id.transactionDateYear
                             };
+
+        if(context__!=null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
+    public MyTransactionAdapter expenseListViewFromDB(String account){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String type = "WYDATEK";
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM " + TRANSACTION_TABLE + " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" AND " + COLUMN_TRANSACTION_TYPE + " = \"" + type + "\" ORDER BY " + COLUMN_TRANSACTION_ID + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
+
+        if(context__!=null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
+    public MyTransactionAdapter incomeListViewFromDB(String account){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String type = "WPŁYW";
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM " + TRANSACTION_TABLE + " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" AND " + COLUMN_TRANSACTION_TYPE + " = \"" + type + "\" ORDER BY " + COLUMN_TRANSACTION_ID + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
 
         if(context__!=null) {
             MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(

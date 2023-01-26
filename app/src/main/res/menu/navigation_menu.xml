@@ -3,7 +3,8 @@
 
     <item android:id="@+id/menuWallet"
         android:icon="@drawable/wallet_icon"
-        android:title="@string/wallet" />
+        android:title="@string/wallet"
+        android:name="com.example.WalletFragment"/>
 
     <item android:id="@+id/menuAnalysis"
         android:icon="@drawable/analysis_icon"

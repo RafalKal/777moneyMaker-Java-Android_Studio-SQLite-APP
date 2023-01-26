@@ -85,6 +85,46 @@
             app:layout_constraintTop_toBottomOf="@+id/balanceText"
             app:layout_constraintVertical_bias="0.128" />
 
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/transactionListView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" >
+
+            <RadioButton
+                android:id="@+id/radioButtonAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WSZYSTKO">
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioButtonExpense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WYDATKI">
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioButtonIncome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WPŁYWY">
+            </RadioButton>
+
+            <Button
+                android:id="@+id/changeListViewContentButton"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:text="ZMIEN">
+            </Button>
+
+        </RadioGroup>
+
         <ListView
             android:id="@+id/transactionListView"
             android:layout_width="match_parent"

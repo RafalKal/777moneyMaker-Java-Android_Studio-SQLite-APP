@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
@@ -178,7 +181,6 @@ public class AddExpenseActivity extends AppCompatActivity {
                     ApplicationState.getActualAccountModel().getName(),
                     (ApplicationState.getActualAccountModel().getBalance() - price)
             );
-            Toast.makeText(AddExpenseActivity.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();
