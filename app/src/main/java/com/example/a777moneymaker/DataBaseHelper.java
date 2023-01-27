@@ -150,6 +150,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
+    public CategoryModel getCategoryModelByPosition(int id){
+        for (int i = 0; i < getEveryCategory().size(); i++){
+            if(getEveryAccount().get(i).getId() == id){
+                return getEveryCategory().get(i);
+            }
+        }
+        return null;
+    }
+
     public CategoryModel getCategoryModelByID(int id){
         for (int i = 0; i < getEveryCategory().size(); i++){
             if(getEveryAccount().get(i).getId() == id){

@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +23,7 @@ import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
+import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.TransactionModel;
 
 public class WalletFragment extends Fragment {
@@ -36,7 +39,7 @@ public class WalletFragment extends Fragment {
     EditText nameEditText;
     EditText descriptionEditText;
     EditText priceEditText;
-    EditText categoryEditText;
+    Spinner categorySpinner;
     EditText accountEditText;
     EditText typeEditText;
     EditText dayEditText;
@@ -166,8 +169,6 @@ public class WalletFragment extends Fragment {
 
                 createTransactionEditDialog(trasactionID, name, description, price, category, account, type, day, month, year);
 
-
-
             }
         });
 
@@ -220,10 +221,34 @@ public class WalletFragment extends Fragment {
         dialogBuilder = new AlertDialog.Builder(this.getActivity());
         final View transactionEditPopupView = getLayoutInflater().inflate(R.layout.popup1_transaction_edit, null);
 
+        categorySpinner = transactionEditPopupView.findViewById(R.id.categorySpinner);
+
+        CategoryModel[] categoriesObjects = dbHelper.getEveryCategory().toArray(new CategoryModel[0]);
+        String[] categories = new String[categoriesObjects.length];
+        for(int i = 0; i < categories.length; i++) {
+            categories[i] = categoriesObjects[i].getName();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(WalletFragment.this.getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String value = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(WalletFragment.this.getActivity(), value, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         nameEditText = transactionEditPopupView.findViewById(R.id.nameEditText);
         descriptionEditText = transactionEditPopupView.findViewById(R.id.descriptionEditText);
         priceEditText = transactionEditPopupView.findViewById(R.id.priceEditText);
-        categoryEditText = transactionEditPopupView.findViewById(R.id.categoryEditText);
         accountEditText = transactionEditPopupView.findViewById(R.id.accountEditText);
         typeEditText = transactionEditPopupView.findViewById(R.id.typeEditText);
         dayEditText = transactionEditPopupView.findViewById(R.id.dayEditText);
@@ -233,7 +258,7 @@ public class WalletFragment extends Fragment {
         nameEditText.setText(name);
         descriptionEditText.setText(description);
         priceEditText.setText(Float.toString(price));
-        categoryEditText.setText(category);
+        categorySpinner.setSelection(getIndex(categorySpinner, category));
         accountEditText.setText(account);
         typeEditText.setText(type);
         dayEditText.setText(Integer.toString(day));
@@ -258,7 +283,7 @@ public class WalletFragment extends Fragment {
                         nameEditText.getText().toString(),
                         descriptionEditText.getText().toString(),
                         Float.parseFloat(priceEditText.getText().toString()),
-                        categoryEditText.getText().toString(),
+                        categorySpinner.getSelectedItem().toString(),
                         accountEditText.getText().toString(),
                         typeEditText.getText().toString(),
                         Integer.parseInt(dayEditText.getText().toString()),
@@ -312,6 +337,16 @@ public class WalletFragment extends Fragment {
                 setBalanceToTextView(dbHelper.getAccountModelByName(accountName).getBalance());
             }
         });
+    }
+
+    private int getIndex(Spinner categorySpinner, String category) {
+
+        for( int i=0; i<categorySpinner.getCount(); i++){
+            if(categorySpinner.getItemAtPosition(i).toString().equalsIgnoreCase(category)){
+                return i;
+            }
+        }
+        return 0;
     }
 
     public void setAccountNameToTextView(String accountName){

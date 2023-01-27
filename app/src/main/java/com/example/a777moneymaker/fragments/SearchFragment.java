@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,7 @@ import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
+import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.TransactionModel;
 
 public class SearchFragment extends Fragment {
@@ -33,7 +36,7 @@ public class SearchFragment extends Fragment {
     EditText nameEditText;
     EditText descriptionEditText;
     EditText priceEditText;
-    EditText categoryEditText;
+    Spinner categorySpinner;
     EditText accountEditText;
     EditText typeEditText;
     EditText dayEditText;
@@ -179,10 +182,34 @@ public class SearchFragment extends Fragment {
         dialogBuilder = new AlertDialog.Builder(this.getActivity());
         final View transactionEditPopupView = getLayoutInflater().inflate(R.layout.popup1_transaction_edit, null);
 
+        categorySpinner = transactionEditPopupView.findViewById(R.id.categorySpinner);
+
+        CategoryModel[] categoriesObjects = dbHelper.getEveryCategory().toArray(new CategoryModel[0]);
+        String[] categories = new String[categoriesObjects.length];
+        for(int i = 0; i < categories.length; i++) {
+            categories[i] = categoriesObjects[i].getName();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(SearchFragment.this.getActivity(), android.R.layout.simple_spinner_item, categories);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String value = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(SearchFragment.this.getActivity(), value, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         nameEditText = transactionEditPopupView.findViewById(R.id.nameEditText);
         descriptionEditText = transactionEditPopupView.findViewById(R.id.descriptionEditText);
         priceEditText = transactionEditPopupView.findViewById(R.id.priceEditText);
-        categoryEditText = transactionEditPopupView.findViewById(R.id.categoryEditText);
         accountEditText = transactionEditPopupView.findViewById(R.id.accountEditText);
         typeEditText = transactionEditPopupView.findViewById(R.id.typeEditText);
         dayEditText = transactionEditPopupView.findViewById(R.id.dayEditText);
@@ -192,12 +219,14 @@ public class SearchFragment extends Fragment {
         nameEditText.setText(name);
         descriptionEditText.setText(description);
         priceEditText.setText(Float.toString(price));
-        categoryEditText.setText(category);
+        categorySpinner.setSelection(getIndex(categorySpinner, category));
         accountEditText.setText(account);
         typeEditText.setText(type);
         dayEditText.setText(Integer.toString(day));
         monthEditText.setText(Integer.toString(month));
         yearEditText.setText(Integer.toString(year));
+
+        float priceBeforeChange = Float.parseFloat(priceEditText.getText().toString());
 
         submitButton = transactionEditPopupView.findViewById(R.id.submitButton);
         deleteButton = transactionEditPopupView.findViewById(R.id.deleteButton);
@@ -209,17 +238,33 @@ public class SearchFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                float priceAfterChange = Float.parseFloat(priceEditText.getText().toString());
+                float result = priceAfterChange - priceBeforeChange;
                 dbHelper.editTransactionModel(transactionID,
                         nameEditText.getText().toString(),
                         descriptionEditText.getText().toString(),
                         Float.parseFloat(priceEditText.getText().toString()),
-                        categoryEditText.getText().toString(),
+                        categorySpinner.getSelectedItem().toString(),
                         accountEditText.getText().toString(),
                         typeEditText.getText().toString(),
                         Integer.parseInt(dayEditText.getText().toString()),
                         Integer.parseInt(monthEditText.getText().toString()),
                         Integer.parseInt(yearEditText.getText().toString())
                 );
+
+                if(typeEditText.getText().toString().equals("WYDATEK") && result>0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WYDATEK") && result<0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() + Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WPŁYW") && result>0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() + Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WPŁYW") && result<0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
+                }
+
 
                 simpleCursorAdapter = dbHelper.transactionListViewFromDB(accountName);
                 transactionWithPhraseListView.setAdapter(simpleCursorAdapter);
@@ -248,6 +293,16 @@ public class SearchFragment extends Fragment {
                 dialog.dismiss();
             }
         });
+    }
+
+    private int getIndex(Spinner categorySpinner, String category) {
+
+        for( int i=0; i<categorySpinner.getCount(); i++){
+            if(categorySpinner.getItemAtPosition(i).toString().equalsIgnoreCase(category)){
+                return i;
+            }
+        }
+        return 0;
     }
 
 }

@@ -16,8 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -40,8 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -64,8 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -90,7 +87,8 @@
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/textView4"
@@ -99,12 +97,13 @@
             android:text="kategoria: ">
         </TextView>
 
-        <EditText
-            android:id="@+id/categoryEditText"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="kategoria">
-        </EditText>
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/selectCategoryText"
+            android:layout_centerHorizontal="true"
+            android:background="@android:drawable/btn_dropdown" />
 
     </LinearLayout>
 
@@ -112,8 +111,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -136,8 +134,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -160,8 +157,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -184,8 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -208,8 +203,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <TextView
@@ -232,8 +226,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
         <Button
