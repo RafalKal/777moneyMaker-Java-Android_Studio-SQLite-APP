@@ -171,6 +171,8 @@ public class AddExpenseActivity extends AppCompatActivity {
 
         dbHelper = new DataBaseHelper(AddExpenseActivity.this);
 
+        ApplicationState.setActualAccountModel(dbHelper.getAccountModelByName(transactionModel.getAccount()));
+
         try {
             dbHelper.addTransactionModel(transactionModel);
             dbHelper.editAccountModel(
@@ -183,6 +185,9 @@ public class AddExpenseActivity extends AppCompatActivity {
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+        ApplicationState.setActualAccountModel(dbHelper.getAccountModelByName(transactionModel.getAccount()));
+
         finish();
     }
 

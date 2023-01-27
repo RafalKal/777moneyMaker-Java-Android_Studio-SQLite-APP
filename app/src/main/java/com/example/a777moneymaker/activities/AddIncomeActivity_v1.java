@@ -184,6 +184,10 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
             Toast.makeText(AddIncomeActivity_v1.this, "Nie udalo sie dodac wpływu do bazy danych", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+        ApplicationState.setActualAccountModel(dbHelper.getAccountModelByName(transactionModel.getAccount()));
+
+
         finish();
     }
 

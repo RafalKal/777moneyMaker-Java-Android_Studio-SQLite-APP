@@ -183,7 +183,7 @@ public class AccountFragment extends Fragment{
         deleteAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.deleteCategoryModel(accountID);
+                dbHelper.deleteAccountModelByID(accountID);
 
                 simpleCursorAdapter = dbHelper.accountListViewFromDB();
                 accountListView.setAdapter(simpleCursorAdapter);

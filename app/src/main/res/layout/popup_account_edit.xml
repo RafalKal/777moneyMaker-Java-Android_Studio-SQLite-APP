@@ -12,23 +12,23 @@
         android:text="Nazwa: "
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toStartOf="@+id/accountNameEditText"
-        app:layout_constraintHorizontal_bias="0.136"
+        app:layout_constraintHorizontal_bias="0.82"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.554" />
+        app:layout_constraintVertical_bias="0.708" />
 
     <EditText
         android:id="@+id/accountNameEditText"
-        android:layout_width="281dp"
-        android:layout_height="56dp"
+        android:layout_width="230dp"
+        android:layout_height="59dp"
         android:layout_marginTop="36dp"
         android:text="Rafal"
         app:layout_constraintBottom_toTopOf="@+id/accountBalanceEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.553"
+        app:layout_constraintHorizontal_bias="0.651"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.784" />
+        app:layout_constraintVertical_bias="0.804" />
 
     <TextView
         android:id="@+id/textView2"
@@ -38,15 +38,15 @@
         android:text="Saldo: "
         app:layout_constraintBottom_toTopOf="@+id/editAccountButton"
         app:layout_constraintEnd_toStartOf="@+id/accountBalanceEditText"
-        app:layout_constraintHorizontal_bias="0.343"
+        app:layout_constraintHorizontal_bias="0.833"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/accountBalanceEditText"
-        android:layout_width="281dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="56dp"
+        android:layout_width="229dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="60dp"
         android:text="500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

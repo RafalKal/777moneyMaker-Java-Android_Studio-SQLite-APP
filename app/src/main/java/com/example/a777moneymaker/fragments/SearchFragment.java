@@ -118,7 +118,6 @@ public class SearchFragment extends Fragment {
 
         // DB HELPER FOR ADD ACCOUNT TO DATABASE
         dbHelper = new DataBaseHelper(this.getActivity());
-
         // ASSIGNING VIEWS FROM RESOURCES TO OBJECTS
         transactionWithPhraseListView = myView.findViewById(R.id.transactionWithPhraseListView);
 

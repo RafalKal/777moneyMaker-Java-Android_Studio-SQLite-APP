@@ -165,6 +165,9 @@ public class WalletFragment extends Fragment {
                 int year = cursor.getInt(9);
 
                 createTransactionEditDialog(trasactionID, name, description, price, category, account, type, day, month, year);
+
+
+
             }
         });
 
@@ -195,9 +198,6 @@ public class WalletFragment extends Fragment {
 
             }
         });
-
-
-
 
         return myView;
     }
@@ -240,6 +240,8 @@ public class WalletFragment extends Fragment {
         monthEditText.setText(Integer.toString(month));
         yearEditText.setText(Integer.toString(year));
 
+        float priceBeforeChange = Float.parseFloat(priceEditText.getText().toString());
+
         submitButton = transactionEditPopupView.findViewById(R.id.submitButton);
         deleteButton = transactionEditPopupView.findViewById(R.id.deleteButton);
 
@@ -250,6 +252,8 @@ public class WalletFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                float priceAfterChange = Float.parseFloat(priceEditText.getText().toString());
+                float result = priceAfterChange - priceBeforeChange;
                 dbHelper.editTransactionModel(transactionID,
                         nameEditText.getText().toString(),
                         descriptionEditText.getText().toString(),
@@ -262,16 +266,26 @@ public class WalletFragment extends Fragment {
                         Integer.parseInt(yearEditText.getText().toString())
                 );
 
-                if(ApplicationState.getActualAccountModel() != null){
-                    accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());
-                    balanceText.setText(ApplicationState.getActualAccountModel().getBalance() + " zl");
-                    accountName = ApplicationState.getActualAccountModel().getName();
-                }else Toast.makeText(WalletFragment.this.getActivity(), "XDXDXDXDXDX", Toast.LENGTH_LONG);
+                if(typeEditText.getText().toString().equals("WYDATEK") && result>0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WYDATEK") && result<0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() + Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WPŁYW") && result>0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() + Math.abs(result));
+                }
+                else if(typeEditText.getText().toString().equals("WPŁYW") && result<0){
+                    dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
+                }
 
                 simpleCursorAdapter = dbHelper.transactionListViewFromDB(accountName);
                 transactionListView.setAdapter(simpleCursorAdapter);
 
                 dialog.dismiss();
+
+                setAccountNameToTextView(accountName);
+                setBalanceToTextView(dbHelper.getAccountModelByName(accountName).getBalance());
             }
         });
 
@@ -287,21 +301,27 @@ public class WalletFragment extends Fragment {
                    dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() - transaction.getPrice());
                }
 
-                if(ApplicationState.getActualAccountModel() != null){
-                    accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());
-                    balanceText.setText(ApplicationState.getActualAccountModel().getBalance() + " zl");
-                    accountName = ApplicationState.getActualAccountModel().getName();
-                }else Toast.makeText(WalletFragment.this.getActivity(), "XDXDXDXDXDX", Toast.LENGTH_LONG);
-
-
                 dbHelper.deleteTransactionModel(transactionID);
 
                 simpleCursorAdapter = dbHelper.transactionListViewFromDB(accountName);
                 transactionListView.setAdapter(simpleCursorAdapter);
 
                 dialog.dismiss();
+
+                setAccountNameToTextView(accountName);
+                setBalanceToTextView(dbHelper.getAccountModelByName(accountName).getBalance());
             }
         });
+    }
+
+    public void setAccountNameToTextView(String accountName){
+        String text = "Portfel " + accountName;
+        accountNameText.setText(text);
+    }
+
+    public void setBalanceToTextView(float balance){
+        String text = balance + " zl";
+        balanceText.setText(text);
     }
 
 }
