@@ -24,16 +24,17 @@
         app:layout_constraintStart_toStartOf="@id/imageProfile"
         app:layout_constraintTop_toTopOf="@id/imageProfile" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="Rafal"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/vievSuppoerter"
-        app:layout_constraintStart_toEndOf="@id/imageProfile" />
+<!--    <TextView-->
+<!--        android:id="@+id/actualAccount"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="10dp"-->
+<!--        android:text="Rafal"-->
+<!--        android:textColor="@color/colorPrimaryText"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/vievSuppoerter"-->
+<!--        app:layout_constraintStart_toEndOf="@id/imageProfile" />-->
     
     <TextView
         android:layout_width="0dp"

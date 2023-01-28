@@ -1,16 +1,16 @@
 package com.example.a777moneymaker.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
-import com.example.a777moneymaker.MyNotificationManager;
+import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.R;
 
 public class NotificationFragment extends Fragment {
@@ -21,7 +21,11 @@ public class NotificationFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button notificationButton;
+    DataBaseHelper dbHelper;
+
+    Button setLimitButton;
+    EditText limitEditText;
+    TextView limitTextView;
 
     View myView;
 
@@ -56,22 +60,25 @@ public class NotificationFragment extends Fragment {
             Toast.makeText(NotificationFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
         }
 
-        notificationButton = myView.findViewById(R.id.notificationButton);
+        dbHelper = new DataBaseHelper(NotificationFragment.this.getActivity());
 
-        Context context = NotificationFragment.this.getActivity();
+        setLimitButton = myView.findViewById(R.id.setLimitButton);
+        limitEditText = myView.findViewById(R.id.limitEditText);
+        limitTextView = myView.findViewById(R.id.limitTextView);
 
-        notificationButton.setOnClickListener(new View.OnClickListener() {
+        String textViewContent = "KWOTA DLA POWIADOMIEŃ: " + String.valueOf(dbHelper.getNotificationLimit());
+        limitTextView.setText(textViewContent);
+
+        setLimitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
-                        MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
-                    }
-                }, 6000);
+                float limit = Float.parseFloat(limitEditText.getText().toString());
+                dbHelper.editNotificationState(dbHelper.getNotificationState(), limit);
+                String textViewContent = "KWOTA DLA POWIADOMIEŃ: " + String.valueOf(dbHelper.getNotificationLimit());
+                limitTextView.setText(textViewContent);
             }
         });
+
 
         return myView;
     }

@@ -14,7 +14,8 @@
         android:id="@+id/notificationStateRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/maney_theme">
 
         <RadioButton
             android:id="@+id/radioButtonNotificationState1"

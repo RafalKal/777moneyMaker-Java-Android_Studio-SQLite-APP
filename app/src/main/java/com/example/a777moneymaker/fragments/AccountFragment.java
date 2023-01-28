@@ -176,7 +176,7 @@ public class AccountFragment extends Fragment{
                 dbHelper.editAccountModel(accountID, accountNameEditText.getText().toString(), Float.parseFloat(accountBalanceEditText.getText().toString()));
 
                 if(dbHelper.getNotificationState()==1){
-                    if(dbHelper.getAccountModelByID(accountID).getBalance() < 1000){
+                    if(dbHelper.getAccountModelByID(accountID).getBalance() < dbHelper.getNotificationLimit()){
                         Context context = AccountFragment.this.getActivity();
                         new Handler().postDelayed(new Runnable() {
                             @Override

@@ -309,7 +309,7 @@ public class WalletFragment extends Fragment {
                 }
 
                 if(dbHelper.getNotificationState()==1){
-                    if(dbHelper.getAccountModelByName(account).getBalance() < 1000){
+                    if(dbHelper.getAccountModelByName(account).getBalance() < dbHelper.getNotificationLimit()){
                         Context context = WalletFragment.this.getActivity();
                         notificationManager = new MyNotificationManager();
                         new Handler().postDelayed(new Runnable() {
@@ -345,7 +345,7 @@ public class WalletFragment extends Fragment {
                }
 
                if(dbHelper.getNotificationState()==1){
-                   if(dbHelper.getAccountModelByID(account.getId()).getBalance() < 1000){
+                   if(dbHelper.getAccountModelByID(account.getId()).getBalance() < dbHelper.getNotificationLimit()){
                        Context context = WalletFragment.this.getActivity();
                        notificationManager = new MyNotificationManager();
                        new Handler().postDelayed(new Runnable() {

@@ -3,6 +3,8 @@ package com.example.a777moneymaker.activities;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,6 +17,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
 import com.example.a777moneymaker.MyNotificationManager;
@@ -185,7 +189,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             );
 
             if(dbHelper.getNotificationState()==1){
-                if(ApplicationState.getActualAccountModel().getBalance() < 1000){
+                if(ApplicationState.getActualAccountModel().getBalance() < dbHelper.getNotificationLimit()){
                     Context context = AddExpenseActivity.this;
                     new Handler().postDelayed(new Runnable() {
                         @Override

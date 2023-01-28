@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         if(!dbHelper.ifNotificationExist()) {
             dbHelper.addNotificationModel(new NotificationModel(1, 1000));
         }
+
     }
 
     public void showTransactions(View view){
