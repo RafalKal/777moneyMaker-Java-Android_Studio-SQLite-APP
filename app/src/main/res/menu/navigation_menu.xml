@@ -6,9 +6,9 @@
         android:title="@string/wallet"
         android:name="com.example.WalletFragment"/>
 
-    <item android:id="@+id/menuAnalysis"
-        android:icon="@drawable/analysis_icon"
-        android:title="@string/analysis" />
+    <item android:id="@+id/menuNotification"
+        android:icon="@drawable/notification_icon"
+        android:title="@string/notification" />
 
     <item android:id="@+id/menuSearch"
         android:icon="@drawable/search_icon"

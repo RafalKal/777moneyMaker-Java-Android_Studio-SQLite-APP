@@ -1,8 +1,10 @@
 package com.example.a777moneymaker.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.MyNotificationManager;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
@@ -265,6 +268,16 @@ public class SearchFragment extends Fragment {
                     dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
                 }
 
+                if(dbHelper.getAccountModelByName(account).getBalance() < 1000){
+                    Context context = SearchFragment.this.getActivity();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                            MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                        }
+                    }, 6000);
+                }
 
                 simpleCursorAdapter = dbHelper.transactionListViewFromDB(accountName);
                 transactionWithPhraseListView.setAdapter(simpleCursorAdapter);
@@ -283,6 +296,17 @@ public class SearchFragment extends Fragment {
                     dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() + transaction.getPrice());
                 }else {
                     dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() - transaction.getPrice());
+                }
+
+                if(dbHelper.getAccountModelByName(account.getName()).getBalance() < 1000){
+                    Context context = SearchFragment.this.getActivity();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                            MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                        }
+                    }, 6000);
                 }
 
                 dbHelper.deleteTransactionModel(transactionID);

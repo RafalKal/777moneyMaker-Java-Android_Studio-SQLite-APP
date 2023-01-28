@@ -1,11 +1,13 @@
 package com.example.a777moneymaker.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.MyNotificationManager;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.adapters.MyAccountsAdapter;
 
@@ -171,6 +174,20 @@ public class AccountFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 dbHelper.editAccountModel(accountID, accountNameEditText.getText().toString(), Float.parseFloat(accountBalanceEditText.getText().toString()));
+
+                if(dbHelper.getNotificationState()==1){
+                    if(dbHelper.getAccountModelByID(accountID).getBalance() < 1000){
+                        Context context = AccountFragment.this.getActivity();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                                MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                            }
+                        }, 6000);
+                    }
+                }
+
                 dbHelper.editTransactionAfterEditingAccount(name, accountNameEditText.getText().toString());
 
                 simpleCursorAdapter = dbHelper.accountListViewFromDB();
@@ -194,4 +211,3 @@ public class AccountFragment extends Fragment{
     }
 
 }
-

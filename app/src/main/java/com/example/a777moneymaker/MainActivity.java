@@ -19,6 +19,7 @@ import com.example.a777moneymaker.activities.AddExpenseActivity;
 import com.example.a777moneymaker.activities.AddIncomeActivity_v1;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.fragments.WalletFragment;
+import com.example.a777moneymaker.models.NotificationModel;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         DataBaseHelper dbHelper = new DataBaseHelper(MainActivity.this);
         ApplicationState.setActualAccountModel(dbHelper.getAccountModelByID(1));
+        if(!dbHelper.ifNotificationExist()) {
+            dbHelper.addNotificationModel(new NotificationModel(1, 1000));
+        }
     }
 
     public void showTransactions(View view){

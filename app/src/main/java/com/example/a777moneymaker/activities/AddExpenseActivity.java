@@ -2,7 +2,9 @@ package com.example.a777moneymaker.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.MyNotificationManager;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.TransactionModel;
@@ -180,6 +183,19 @@ public class AddExpenseActivity extends AppCompatActivity {
                     ApplicationState.getActualAccountModel().getName(),
                     (ApplicationState.getActualAccountModel().getBalance() - price)
             );
+
+            if(dbHelper.getNotificationState()==1){
+                if(ApplicationState.getActualAccountModel().getBalance() < 1000){
+                    Context context = AddExpenseActivity.this;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                            MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                        }
+                    }, 6000);
+                }
+            }
 
         }catch (Exception e) {
             Toast.makeText(AddExpenseActivity.this, "Nie udalo sie dodac wydatku do bazy danych", Toast.LENGTH_LONG).show();

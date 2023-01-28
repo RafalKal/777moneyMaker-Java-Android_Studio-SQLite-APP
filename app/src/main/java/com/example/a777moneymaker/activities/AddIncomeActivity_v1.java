@@ -2,7 +2,9 @@ package com.example.a777moneymaker.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,16 +12,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.Calendar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.MyNotificationManager;
 import com.example.a777moneymaker.R;
+import com.example.a777moneymaker.fragments.NotificationFragment;
 import com.example.a777moneymaker.models.CategoryModel;
 import com.example.a777moneymaker.models.TransactionModel;
-import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AddIncomeActivity_v1 extends AppCompatActivity {
 
@@ -178,6 +182,22 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
                     ApplicationState.getActualAccountModel().getName(),
                     (ApplicationState.getActualAccountModel().getBalance() + price)
             );
+
+            if(dbHelper.getNotificationState()==1){
+                if(ApplicationState.getActualAccountModel().getBalance() < 1000){
+                    Context context = AddIncomeActivity_v1.this;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MyNotificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                            MyNotificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                        }
+                    }, 6000);
+            }
+
+            }
+
+
             Toast.makeText(AddIncomeActivity_v1.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {

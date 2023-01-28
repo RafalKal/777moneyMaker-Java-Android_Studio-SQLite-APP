@@ -1,8 +1,10 @@
 package com.example.a777moneymaker.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.DataBaseHelper;
+import com.example.a777moneymaker.MyNotificationManager;
 import com.example.a777moneymaker.R;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
@@ -29,6 +32,7 @@ import com.example.a777moneymaker.models.TransactionModel;
 public class WalletFragment extends Fragment {
 
     ConstraintLayout constraintLayout;
+    MyNotificationManager notificationManager;
     DataBaseHelper dbHelper;
     ListView transactionListView;
     MyTransactionAdapter simpleCursorAdapter;
@@ -87,11 +91,11 @@ public class WalletFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        if(ApplicationState.getActualAccountModel() != null){
-            accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());
-            balanceText.setText(ApplicationState.getActualAccountModel().getBalance() + " zl");
-            accountName = ApplicationState.getActualAccountModel().getName();
-        }else Toast.makeText(WalletFragment.this.getActivity(), "XDXDXDXDXDX", Toast.LENGTH_LONG);
+//        if(ApplicationState.getActualAccountModel() != null){
+//            accountNameText.setText("Portfel " + ApplicationState.getActualAccountModel().getName());
+//            balanceText.setText(ApplicationState.getActualAccountModel().getBalance() + " zl");
+//            accountName = ApplicationState.getActualAccountModel().getName();
+//        }else Toast.makeText(WalletFragment.this.getActivity(), "XDXDXDXDXDX", Toast.LENGTH_LONG);
 
     }
 
@@ -304,6 +308,20 @@ public class WalletFragment extends Fragment {
                     dbHelper.editAccountModel(dbHelper.getAccountModelByName(account).getId(), account, dbHelper.getAccountModelByName(account).getBalance() - Math.abs(result));
                 }
 
+                if(dbHelper.getNotificationState()==1){
+                    if(dbHelper.getAccountModelByName(account).getBalance() < 1000){
+                        Context context = WalletFragment.this.getActivity();
+                        notificationManager = new MyNotificationManager();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                notificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                                notificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                            }
+                        }, 6000);
+                    }
+                }
+
                 simpleCursorAdapter = dbHelper.transactionListViewFromDB(accountName);
                 transactionListView.setAdapter(simpleCursorAdapter);
 
@@ -324,6 +342,20 @@ public class WalletFragment extends Fragment {
                    dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() + transaction.getPrice());
                }else {
                    dbHelper.editAccountModel(account.getId(), account.getName(), account.getBalance() - transaction.getPrice());
+               }
+
+               if(dbHelper.getNotificationState()==1){
+                   if(dbHelper.getAccountModelByID(account.getId()).getBalance() < 1000){
+                       Context context = WalletFragment.this.getActivity();
+                       notificationManager = new MyNotificationManager();
+                       new Handler().postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               notificationManager.createNotificationChannel(context, "channel", "WalletChannel", "WalletChannelDescription");
+                               notificationManager.addNotification(context, "channel", "Malo kasy", "Brakuje kasy - Brakuje kasy - Brakuje kasy - Brakuje kasy - ");
+                           }
+                       }, 6000);
+                   }
                }
 
                 dbHelper.deleteTransactionModel(transactionID);

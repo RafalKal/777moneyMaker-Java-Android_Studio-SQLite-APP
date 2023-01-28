@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.widget.SimpleCursorAdapter;
 import androidx.annotation.Nullable;
 import com.example.a777moneymaker.adapters.MyAccountsAdapter;
@@ -12,7 +13,11 @@ import com.example.a777moneymaker.adapters.MyCategoriesAdapter;
 import com.example.a777moneymaker.adapters.MyTransactionAdapter;
 import com.example.a777moneymaker.models.AccountModel;
 import com.example.a777moneymaker.models.CategoryModel;
+import com.example.a777moneymaker.models.NotificationModel;
 import com.example.a777moneymaker.models.TransactionModel;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.logging.Log;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +51,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TRANSACTION_MONTH = "TRANSACTION_MONTH";
     public static final String COLUMN_TRANSACTION_YEAR = "TRANSACTION_YEAR";
 
+    // _NOTIFICATION_ FINAL VARIABLES
+    public static final String NOTIFICATION_TABLE = "NOTIFICATION_TABLE";
+    public static final String COLUMN_NOTIFICATION_ID = "_id";
+    public static final String COLUMN_NOTIFICATION_STATE = "NOTIFICATION_STATE";
+    public static final String COLUMN_NOTIFICATION_LIMIT = "NOTIFICATION_LIMIT";
+
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "productionProcessDB10.db", null, 1);
+        super(context, "productionProcessDB1.db", null, 1);
         context_ = context;
         context__ = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        // STATEMENT FOR CREATING NOTIFICATION TABLE IN DATABASE
+        String createNotificationTableStatement = "CREATE TABLE " + NOTIFICATION_TABLE + " (" + COLUMN_NOTIFICATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NOTIFICATION_STATE + " INTEGER, " + COLUMN_NOTIFICATION_LIMIT + " REAL)";
 
         // STATEMENT FOR CREATING ACCOUNT TABLE IN DATABASE
         String createAccountTableStatement = "CREATE TABLE " + USER_ACC_TABLE + " (" + COLUMN_ACCOUNT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ACCOUNT_NAME + " TEXT, " + COLUMN_MAIN_ACCOUNT + " BOOL, " + COLUMN_ACCOUNT_BALANCE + " REAL)";
@@ -70,11 +84,119 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL(createTransactionTableStatement);
         db.execSQL(createAccountTableStatement);
         db.execSQL(createCategoryTableStatement);
+        db.execSQL(createNotificationTableStatement);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
+
+    // -----------------------------------------------------------------------------------\
+    // _NOTIFICATION_ FUNCTIONS  |   _NOTIFICATION_ FUNCTIONS  |   _NOTIFICATION_ FUNCTIONS           |
+    // -----------------------------------------------------------------------------------/
+
+    public boolean addNotificationModel(NotificationModel notificationModel){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_NOTIFICATION_STATE, notificationModel.getState());
+        cv.put(COLUMN_NOTIFICATION_LIMIT, notificationModel.getLowerLimit());
+
+        long insert = db.insert(NOTIFICATION_TABLE, null, cv);
+
+        if (insert == -1){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public boolean editNotificationState(int state, float limit){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String queryString = "UPDATE " + NOTIFICATION_TABLE +
+                " SET " + COLUMN_NOTIFICATION_STATE + " = " + state + " , " + COLUMN_NOTIFICATION_LIMIT + " = " + limit + " " +
+                "WHERE " + COLUMN_CATEGORY_ID + " = " + 1;
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public int getNotificationState() {
+        List<NotificationModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + NOTIFICATION_TABLE  ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                int notificationID = cursor.getInt(0);
+                int state = cursor.getInt(1);
+                float limit = cursor.getFloat(2);
+
+                NotificationModel newNotification = new NotificationModel(notificationID, state, limit);
+                returnList.add(newNotification);
+            }while (cursor.moveToNext());
+        }else {
+            // EMPTY SECTION
+        }
+        cursor.close();
+        db.close();
+        return returnList.get(0).getState();
+    }
+
+    public float getNotificationLimit() {
+        List<NotificationModel> returnList = new ArrayList<>();
+
+        String queryString = "SELECT * FROM " + NOTIFICATION_TABLE  ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        if(cursor.moveToFirst()) {
+            do {
+                int notificationID = cursor.getInt(0);
+                int state = cursor.getInt(1);
+                float limit = cursor.getFloat(2);
+
+                NotificationModel newNotification = new NotificationModel(notificationID, state, limit);
+                returnList.add(newNotification);
+            }while (cursor.moveToNext());
+        }else {
+            // EMPTY SECTION
+        }
+        cursor.close();
+        db.close();
+        return returnList.get(0).getLowerLimit();
+    }
+
+    public boolean ifNotificationExist(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String sql ="SELECT " + COLUMN_NOTIFICATION_STATE +
+                    " FROM " + NOTIFICATION_TABLE +
+                    " WHERE " + COLUMN_NOTIFICATION_STATE + " = " + 1 + " OR " + COLUMN_NOTIFICATION_STATE + " = " + 0 ;
+        cursor = db.rawQuery(sql,null);
+
+        if(cursor.getCount()>0){
+            cursor.close();
+            return true;
+        }else{
+            cursor.close();
+            return false;
+        }
+    }
+
 
     // -----------------------------------------------------------------------------------\
     // _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS  |   _CATEGORY_ FUNCTIONS           |
@@ -451,6 +573,65 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
+    public MyTransactionAdapter getEveryTransactionBetweenDates(String account, int day1, int month1, int year1, int day2, int month2, int year2) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String columns[] = {
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        String query = "SELECT * FROM " + TRANSACTION_TABLE + " WHERE " + COLUMN_TRANSACTION_ACCOUNT + " = \"" + account + "\" ORDER BY "+ COLUMN_TRANSACTION_ID + " DESC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        String[] fromFieldNames = new String[]{
+                COLUMN_TRANSACTION_ID,
+                COLUMN_TRANSACTION_NAME,
+                COLUMN_TRANSACTION_DESCRIPTION,
+                COLUMN_TRANSACTION_PRICE,
+                COLUMN_TRANSACTION_CATEGORY,
+                COLUMN_TRANSACTION_ACCOUNT,
+                COLUMN_TRANSACTION_TYPE,
+                COLUMN_TRANSACTION_DAY,
+                COLUMN_TRANSACTION_MONTH,
+                COLUMN_TRANSACTION_YEAR
+        };
+
+        int[] toVievIDs = new int[]{
+                R.id.transactionID,
+                R.id.transactionName,
+                R.id.transactionDescription,
+                R.id.transactionValue,
+                R.id.transactionCategory,
+                R.id.transactionAccount,
+                R.id.transactionType,
+                R.id.transactionDateDay,
+                R.id.transactionDateMonth,
+                R.id.transactionDateYear
+        };
+
+        if(context__ != null) {
+            MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
+                    context__,
+                    R.layout.row_in_transaction_list,
+                    cursor,
+                    fromFieldNames,
+                    toVievIDs
+            );
+            return transactionAdapter;
+        }else return null;
+    }
+
     public MyTransactionAdapter transactionListViewFromDB(String account){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -497,7 +678,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                             R.id.transactionDateYear
                             };
 
-        if(context__!=null) {
+        if(context__ != null) {
             MyTransactionAdapter transactionAdapter = new MyTransactionAdapter(
                     context__,
                     R.layout.row_in_transaction_list,
@@ -823,6 +1004,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             );
             return transactionAdapter;
         }else return null;
+    }
+
+    public boolean checkDateRange(int day1, int month1, int year1, int day2, int month2, int year2, int day3, int month3, int year3) {
+        LocalDate date1 = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            date1 = LocalDate.of(year1, month1, day1);
+        }
+        LocalDate date2 = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            date2 = LocalDate.of(year2, month2, day2);
+        }
+        LocalDate date3 = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            date3 = LocalDate.of(year3, month3, day3);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return (date3.isAfter(date1) && date3.isBefore(date2)) || date3.equals(date1) || date3.equals(date2);
+        }
+        return false;
     }
 
 }

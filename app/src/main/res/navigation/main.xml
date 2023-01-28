@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_wallet" />
 
     <fragment
-        android:id="@+id/menuAnalysis"
-        android:name="com.example.a777moneymaker.fragments.AnalysisFragment"
-        android:label="Analysis"
-        tools:layout="@layout/fragment_analysis" />
+        android:id="@+id/menuNotification"
+        android:name="com.example.a777moneymaker.fragments.NotificationFragment"
+        android:label="Notification"
+        tools:layout="@layout/fragment_notification" />
 
     <fragment
         android:id="@+id/menuSearch"
