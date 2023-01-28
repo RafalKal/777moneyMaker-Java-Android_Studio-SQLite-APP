@@ -36,10 +36,10 @@
         tools:layout="@layout/fragment_category" />
 
     <fragment
-        android:id="@+id/menuContactUs"
-        android:name="com.example.a777moneymaker.fragments.ContactUsFragment"
-        android:label="ContactUs"
-        tools:layout="@layout/fragment_contact_us" />
+        android:id="@+id/menuAboutUs"
+        android:name="com.example.a777moneymaker.fragments.AboutUsFragment"
+        android:label="AboutUs"
+        tools:layout="@layout/fragment_about_us" />
 
     <fragment
         android:id="@+id/menuSettings"

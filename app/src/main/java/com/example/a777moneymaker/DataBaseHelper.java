@@ -59,7 +59,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public DataBaseHelper(@Nullable Context context) {
-        super(context, "productionProcessDB1.db", null, 1);
+        super(context, "productionProcessDB.db", null, 1);
         context_ = context;
         context__ = context;
     }

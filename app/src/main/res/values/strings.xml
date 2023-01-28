@@ -6,7 +6,8 @@
     <string name="search">Szukaj</string>
     <string name="account">Konto</string>
     <string name="category">Kategorie</string>
+    <string name="aboutUs">O nas</string>
     <string name="settings">Ustawienia</string>
-    <string name="contactUs">Kontakt</string>
+
 
 </resources>

@@ -3,11 +3,8 @@ package com.example.a777moneymaker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -16,9 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.a777moneymaker.activities.AddAccountActivity;
 import com.example.a777moneymaker.activities.AddCategoryActivity;
 import com.example.a777moneymaker.activities.AddExpenseActivity;
-import com.example.a777moneymaker.activities.AddIncomeActivity_v1;
-import com.example.a777moneymaker.adapters.MyTransactionAdapter;
-import com.example.a777moneymaker.fragments.WalletFragment;
+import com.example.a777moneymaker.activities.AddIncomeActivity;
 import com.example.a777moneymaker.models.NotificationModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -63,14 +58,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addIncome(View view){
-        Intent intent = new Intent(getApplicationContext(), AddIncomeActivity_v1.class);
+        Intent intent = new Intent(getApplicationContext(), AddIncomeActivity.class);
         startActivity(intent);
     }
-
-//    public void show(View view){
-//        Intent intent = new Intent(getApplicationContext(), AddExpenseActivity.class);
-//        startActivity(intent);
-//    }
 
     public void goToAddAccount(View view){
         Intent intent = new Intent(getApplicationContext(), AddAccountActivity.class);

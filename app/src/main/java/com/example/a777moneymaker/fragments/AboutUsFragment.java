@@ -9,7 +9,7 @@ import com.example.a777moneymaker.ApplicationState;
 import com.example.a777moneymaker.R;
 import androidx.fragment.app.Fragment;
 
-public class ContactUsFragment extends Fragment {
+public class AboutUsFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -17,10 +17,10 @@ public class ContactUsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ContactUsFragment() {}
+    public AboutUsFragment() {}
 
-    public static ContactUsFragment newInstance(String param1, String param2) {
-        ContactUsFragment fragment = new ContactUsFragment();
+    public static AboutUsFragment newInstance(String param1, String param2) {
+        AboutUsFragment fragment = new AboutUsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -41,10 +41,10 @@ public class ContactUsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.fragment_contact_us, container, false);
+        View myView = inflater.inflate(R.layout.fragment_about_us, container, false);
 
         if(ApplicationState.getActualAccountModel() != null){
-            Toast.makeText(ContactUsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
+            Toast.makeText(AboutUsFragment.this.getActivity(), "Aktualne konto: " + ApplicationState.getActualAccountModel().getName(), Toast.LENGTH_LONG).show();
         }
 
         return myView;

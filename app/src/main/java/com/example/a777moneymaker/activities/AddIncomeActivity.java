@@ -24,7 +24,7 @@ import com.example.a777moneymaker.models.TransactionModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddIncomeActivity_v1 extends AppCompatActivity {
+public class AddIncomeActivity extends AppCompatActivity {
 
     EditText nameTextInput;
     EditText priceTextInput;
@@ -46,7 +46,7 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // OPEN DATABASE HELPER / CONTROLLER
-        dbHelper = new DataBaseHelper(AddIncomeActivity_v1.this);
+        dbHelper = new DataBaseHelper(AddIncomeActivity.this);
 
         // INIT LAYOUT FROM XML
         super.onCreate(savedInstanceState);
@@ -172,7 +172,7 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
 
     public void submitAddExpense(View view) {
 
-        dbHelper = new DataBaseHelper(AddIncomeActivity_v1.this);
+        dbHelper = new DataBaseHelper(AddIncomeActivity.this);
 
         try {
             dbHelper.addTransactionModel(transactionModel);
@@ -184,7 +184,7 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
 
             if(dbHelper.getNotificationState()==1){
                 if(ApplicationState.getActualAccountModel().getBalance() < dbHelper.getNotificationLimit()){
-                    Context context = AddIncomeActivity_v1.this;
+                    Context context = AddIncomeActivity.this;
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -195,10 +195,10 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
                 }
             }
 
-            Toast.makeText(AddIncomeActivity_v1.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity.this, dbHelper.getEveryTransaction().toString(), Toast.LENGTH_LONG).show();
 
         }catch (Exception e) {
-            Toast.makeText(AddIncomeActivity_v1.this, "Nie udalo sie dodac wpływu do bazy danych", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity.this, "Nie udalo sie dodac wpływu do bazy danych", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -241,7 +241,7 @@ public class AddIncomeActivity_v1 extends AppCompatActivity {
             priceTextInput.setText(null);
             descriptionTextInput.setText(null);
         }else {
-            Toast.makeText(AddIncomeActivity_v1.this, "Nie ma konta, do którego można przypisać Wpływ", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddIncomeActivity.this, "Nie ma konta, do którego można przypisać Wpływ", Toast.LENGTH_LONG).show();
         }
     }
 
